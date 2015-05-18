@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <script type='text/javascript'>
+        window.onAmazonLoginReady = function () {
+            amazon.Login.setClientId('{{ session['client_id'] }}');
+            amazon.Login.setUseCookie(true);
+        };
+    </script>
+    <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
+{% endblock head %}
+
+{% block content %}
+    <h2>Confirm</h2>
+    <p>Congratulations! You are now a proud owner of the official Pay with Amazon 
+    Python Software Development Kit!</p>
+    <p>At this point we will make the <em>Confirm</em> API call to confirm the order 
+    reference and a subsequesnt <em>Authorize</em> and <em>Capture</em> API call. 
+    If you used a test account associated with your email address you should receive 
+    an email.</p>
+    <p>This concludes the Python simple checkout example.</p>
+{% endblock content %}
+
+{% block api %}
+<p>Here you can see how we made the <em>Confirm</em> and <em>Authorize</em> calls.</p>
+<pre><code class="language-python">from pay_with_amazon.client import PayWithAmazonClient
+
+pretty_confirm = None
+pretty_authorize = None
+
+client = PayWithAmazonClient(
+    mws_access_key=session['mws_access_key'],
+    mws_secret_key=session['mws_secret_key'],
+    merchant_id=session['merchant_id'],
+    sandbox=True,
+    region=&#x27;na&#x27;,
+    currency_code=&#x27;USD&#x27;)
+
+response = client.confirm_order_reference(
+    amazon_order_reference_id=session['order_reference_id'])
+
+pretty_confirm = json.dumps(
+    json.loads(
+        response.to_json()),
+    indent=4)
+
+if response.success:
+    response = client.authorize(
+        amazon_order_reference_id=session['order_reference_id'],
+        authorization_reference_id=rand(),
+        authorization_amount=&#x27;19.95&#x27;,
+        transaction_timeout=0,
+        capture_now=True)
+
+pretty_authorize = json.dumps(
+    json.loads(
+        response.to_json()),
+    indent=4)
+
+return render_template(
+    &#x27;confirm.html&#x27;, confirm=pretty_confirm, authorize=pretty_authorize)
+</code></pre>
+
+<p>The <em>Confirm</em> API call does not return any special values. If it were 
+unsuccessful you would see an error response.</p>
+<pre><code class="json">{{ confirm }}</code></pre>
+
+<p>The <em>Authorize</em> API call will authorize the order reference. Instead 
+of making a separate <em>Capture</em> API call we can set the <strong>CaptureNow</strong> 
+parameter to <strong>True</strong> and the funds will be captured in the same call.</p>
+<pre><code class="json">{{ authorize }}</code></pre>
+{% endblock api %}
