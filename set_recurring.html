@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="description" content="Login and Pay with Amazon SDK Samples : Login and Pay with Amazon SDK Sample Code">
+
+        <script type="text/javascript">
+            var host = "amzn.github.io";
+            if ((host === window.location.host) && (window.location.protocol !== "https:"))
+                window.location.protocol = "https";
+            window.onAmazonLoginReady = function () {
+                amazon.Login.setClientId('amzn1.application-oa2-client.cb8c1ca99afa4ce4a18067eccf098823');
+                amazon.Login.setUseCookie(true);
+            };
+        </script>
+        <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="javascripts/prism.js"></script>
+        <script type="text/javascript" src="javascripts/floater.js"></script>
+
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/reset.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/prism.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/font-mfizz.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                function getURLParameter(name, source) {
+                    return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
+                            '([^&;]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+                }
+                function getParameterByName(name) {
+                    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+                    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+                            results = regex.exec(location.search);
+                    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+                }
+                var access_token = getParameterByName('access_token');
+                $("#access_token").val(access_token);
+                $("#code_access_token").text(access_token);
+                $("#place-order").on("click", function () {
+                    window.location = "https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/confirm_recurring.html"
+                });
+            });
+        </script>
+
+
+        <title>Login and Pay with Amazon SDK Samples</title>
+    </head>
+
+    <body>
+        <div id='floater'>
+            <div class='float-icon float-lang-php'><i class="step icon-php"></i></div>
+            <div class='float-icon float-lang-python'><i class="step icon-python"></i></div>
+            <div class='float-icon float-lang-ruby'><i class="step icon-ruby"></i></div>
+        </div>
+
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+            <header class="inner">
+                <a id="forkme_banner" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples">View on GitHub</a>
+
+                <h1 id="project_title" style="margin-top:20px;">Pay with Amazon SDK Samples</h1>
+                <h2 id="project_tagline">Pay with Amazon Recurring Payments</h2>
+
+                <section id="downloads">
+                    <a class="zip_download_link" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples/zipball/master">Download this project as a .zip file</a>
+                    <a class="tar_download_link" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples/tarball/master">Download this project as a tar.gz file</a>
+                </section>
+            </header>
+        </div>
+
+        <input type="hidden" id="access_token" value="" />
+
+        <div id="main_content_wrap" class="outer"> <!-- wrap -->
+            <section id="main_content" class="inner">
+
+                <div id="section-content">
+                    <h2>Select Shipping and Payment Method</h2>
+
+                    <p style="margin-top:20px;">Select your billing address and payment method
+                        from the widgets below.</p>
+                    <p>Notice in the URL above there are several parameters available.
+                        The 'access_token' should be saved in order to obtain address line one and
+                        two of the shipping address associated with the payment method.</p>
+                    <p><pre><code class="language-javascript" id="code_access_token"></code></pre></p>
+                    <p>This is known as the address consent token. It is passed to the <em>GetBillingAgreementDetails</em> API
+                        call to retrieve information about the billing agreement id that is generated
+                        by the widgets.</p>
+                    <p>If you see a error message in the widgets you will need to
+                      <a onclick='startOver();' href='#'>start over</a>. This usually indicates that your session has expired.</p>
+
+
+                        <div class="text-center" style="margin-top:40px;">
+                          <div id="addressBookWidgetDiv" style="width:250px; height:200px; display:inline-block;"></div>
+                          <div id="walletWidgetDiv" style="width:250px; height:200px; display:inline-block;"></div>
+                          <div id="consentWidgetDiv" style="width:250px; height:200px; display:inline-block;"></div>
+                          <div style="clear:both;"></div>
+                          <div class="text-center" style="margin-top:20px;">
+                            <button id="place-order" class="btn btn-lg btn-success">Confirm Subscription</button>
+                        </div>
+                      </div>
+
+                    <section class="inner">
+                        <p>Create the widget containers.</p>
+<pre><code class="language-markup">&#x3C;div id=&#x22;addressBookWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
+&#x3C;div id=&#x22;walletWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
+&#x3C;div id=&#x22;consentWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;</code></pre>
+
+                        <p>Add script to set the client Id just as you did for displaying the Pay with Amazon button.</p>
+<pre><code class="language-javascript">
+&#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
+  window.onAmazonLoginReady = function () {
+      amazon.Login.setClientId('CLIENT_ID');
+      amazon.Login.setUseCookie(true);
+  };
+&#x3C;/script&#x3E;</code></pre>
+
+<p>Import widgets javascript. This must be loaded after you set the client Id above.</p>
+<pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;</code></pre>
+
+<p>Add the widgets code. You can use the <em>onOrderReferenceCreate</em> method to
+    obtain information about the order reference Id. The 'Confirm Subscription' button is enabled and disabled depending on
+    the status of the consent.</p>
+    <p>We also render the consent and wallet widgets once the address
+    widget is loaded. This will ensure they get a valid billing agreement.</p>
+<pre><code class="language-javascript">
+&lt;script type=&quot;text/javascript&quot;&gt;
+  var billingAgreementId;
+
+  new OffAmazonPayments.Widgets.AddressBook({
+      sellerId: 'MERCHANT_ID',
+      agreementType: 'BillingAgreement',
+      onReady: function (billingAgreement) {
+          billingAgreementId = billingAgreement.getAmazonBillingAgreementId();
+
+          // render the consent and payment method widgets once the
+          // address book has loaded
+          new OffAmazonPayments.Widgets.Consent({
+              sellerId: 'MERCHANT_ID',
+              // amazonBillingAgreementId obtained from the Amazon Address Book widget.
+              amazonBillingAgreementId: billingAgreementId,
+              design: {
+                  designMode: 'responsive'
+              },
+              onReady: function (billingAgreementConsentStatus) {
+                  // Called after widget renders
+                  // getConsentStatus returns true or false
+                  // true &ndash; checkbox is selected
+                  // false &ndash; checkbox is unselected - default
+              },
+              onConsent: function (billingAgreementConsentStatus) {
+                  buyerBillingAgreementConsentStatus = billingAgreementConsentStatus.getConsentStatus();
+
+                  // getConsentStatus returns true or false
+                  // true &ndash; checkbox is selected &ndash; buyer has consented
+                  // false &ndash; checkbox is unselected &ndash; buyer has not consented
+
+                  // Replace this code with the action that you want to perform
+                  // after the consent checkbox is selected/unselected.
+              },
+              onError: function (error) {
+                  // your error handling code
+              }
+          }).bind(&quot;consentWidgetDiv&quot;);
+
+          new OffAmazonPayments.Widgets.Wallet({
+              sellerId: 'MERCHANT_ID',
+              amazonBillingAgreementId: billingAgreementId,
+              onPaymentSelect: function (orderReference) {
+              },
+              design: {
+                  designMode: 'responsive'
+              },
+              onError: function (error) {
+                  // your error handling code
+              }
+          }).bind(&quot;walletWidgetDiv&quot;);
+      },
+      onAddressSelect: function (orderReference) {
+
+      },
+      design: {
+          designMode: 'responsive'
+      },
+      onError: function (error) {
+          // your error handling code
+      }
+  }).bind(&quot;addressBookWidgetDiv&quot;);
+&lt;/script&gt;
+</code></pre>
+
+    <p>These are the back-end API calls to <em>SetBillingAgreementDetails</em> and <em>GetBillingAgreementDetails</em>.
+    These API calls set the store name and return the billing agreement details. The Amazon Billing Agreement Id will be created
+    once the widgets load. (see the 'billingAgreementId' parameter in the javascript above)</p>
+    <p>The Pay with Amazon client will be initialized here and used throughout the rest of the sample.</p>
+    <div class="alert alert-danger" role="alert">The below is sample code. Your MWS Keys should be stored in a secure location.</div>
+
+<pre class="l-python"><code class="language-python">from pay_with_amazon.client import OffAmazonPaymentsClient
+
+client = PayWithAmazonClient(
+    mws_access_key=session['mws_access_key'],
+    mws_secret_key=session['mws_secret_key'],
+    merchant_id=session['merchant_id'],
+    sandbox=True,
+    region='na',
+    currency_code='USD')
+
+billing_agreement_id = request.form['billingAgreementId']
+session['billing_agreement_id'] = billing_agreement_id
+
+response = client.set_billing_agreement_details(
+    amazon_billing_agreement_id=billing_agreement_id,
+    store_name='Pay with Amazon Python SDK')
+
+if response.success:
+    response = client.get_billing_agreement_details(
+        amazon_billing_agreement_id=billing_agreement_id,
+        address_consent_token=session['access_token'])
+
+pretty = json.dumps(
+    json.loads(
+        response.to_json()),
+    indent=4)
+return pretty</code></pre>
+
+
+
+<pre class="l-php"><code class="language-php">
+namespace PayWithAmazon;
+
+session_start();
+
+require_once '../PayWithAmazon/Client.php';
+
+$config = array('merchant_id'   => 'MERCHANT_ID',
+                'access_key'    => 'ACCESS_KEY',
+                'secret_key'    => 'SECRET_KEY',
+                'client_id'     => 'CLIENT_ID',
+                'region'        => 'us',
+                'currency_code' => 'USD',
+                'sandbox'       => true);
+
+// Instantiate the client object with the configuration
+$client = new Client($config);
+$requestParameters = array();
+
+// Required parameters
+$requestParameters['amazon_billing_agreement_id'] = 'AMAZON_BILLING_AGREEMENT_ID';
+
+// Optional parameters
+$requestParameters['seller_note']       = 'This is testing API call';
+$requestParameters['seller_order_id']   = '123456-TestOrder-123456';
+$requestParameters['store_name']        = 'Saurons collectibles in Mordor';
+$requestParameters['seller_billing_agreement_id']   = '1234-example-order';
+
+// Set the Order details by making the SetBillingAgreementDetails API call
+$response = $client->setBillingAgreementDetails($requestParameters);
+
+// If the API call was a success Get the Order Details by making the GetBillingAgreementDetails API call
+// Grab access token from the URL parameters
+if($client->success)
+{
+    $requestParameters['address_consent_token'] = 'ACCESS_TOKEN';
+    $response = $client->getBillingAgreementDetails($requestParameters);
+}
+// Adding the Amazon Billing Agreement ID to the session so that we can use it in ConfirmAndAuthorize.php
+$_SESSION['amazon_billing_agreement_id'] = 'AMAZON_BILLING_AGREEMENT_ID';
+
+// Pretty print the Json and then echo it for the Ajax success to take in
+$json = json_decode($response->toJson());
+echo json_encode($json, JSON_PRETTY_PRINT);
+</code></pre>
+
+
+
+
+
+
+<pre class="l-ruby"><code class="language-ruby">require 'pay_with_amazon'
+
+access_key = 'ACCESS_KEY'
+secret_key = 'SECRET_KEY'
+merchant_id = 'MERCHANT_ID'
+
+client = PayWithAmazon::Client.new(
+    access_key,
+    secret_key,
+    merchant_id,
+    region: :na, # default: :na
+    sandbox: true, # default: false
+    currency_code: :usd) # default: :usd
+
+amazon_billing_agreement_id = 'AMAZON_BILLING_AGREEMENT_ID'
+
+response = client.set_billing_agreement_details(
+    amazon_billing_agreement_id,
+    store_name: 'Pay with Amazon Ruby SDK')
+
+if response.success
+    response = client.get_billing_agreement_details(
+        amazon_billing_agreement_id,
+        address_consent_token: session['access_token'])
+end
+
+response_hash = Hash.from_xml(response.body)
+return response_hash
+</code></pre>
+
+
+
+
+<p>This is the response from the previous API call.</p>
+<pre><code class='language-markup'>
+{
+    "GetBillingAgreementDetailsResponse": {
+        "ResponseMetadata": {
+            "RequestId": "a8976250-6fd0-4aca-811a-c65ce4615c8a"
+        },
+        "GetBillingAgreementDetailsResult": {
+            "BillingAgreementDetails": {
+                "SellerBillingAgreementAttributes": {
+                    "StoreName": "Pay with Amazon Python SDK"
+                },
+                "BillingAgreementLimits": {
+                    "AmountLimitPerTimePeriod": {
+                        "Amount": "500",
+                        "CurrencyCode": "USD"
+                    },
+                    "TimePeriodEndDate": "2015-06-01T00:00:00Z",
+                    "TimePeriodStartDate": "2015-05-01T00:00:00Z",
+                    "CurrentRemainingBalance": {
+                        "Amount": "500.00",
+                        "CurrencyCode": "USD"
+                    }
+                },
+                "ReleaseEnvironment": "Sandbox",
+                "Destination": {
+                    "PhysicalDestination": {
+                        "Name": "Mary Jones",
+                        "CountryCode": "US",
+                        "StateOrRegion": "KS",
+                        "Phone": "800-000-0000",
+                        "City": "Topeka",
+                        "AddressLine1": "4409 Main St.",
+                        "PostalCode": "66615"
+                    },
+                    "DestinationType": "Physical"
+                },
+                "AmazonBillingAgreementId": "C01-2055064-7121930",
+                "Buyer": {
+                    "Name": "Mary Jones",
+                    "Email": "mary@test.com"
+                },
+                "BillingAgreementConsent": "true",
+                "CreationTimestamp": "2015-05-05T23:15:15.489Z",
+                "BillingAgreementStatus": {
+                    "State": "Draft"
+                }
+            }
+        }
+    }
+}</code></pre>
+
+                    </section>
+
+                </div>
+            </section>
+        </div><!-- end wrap -->
+
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+            <footer class="inner">
+                <p class="copyright">Login and Pay with Amazon SDK Samples maintained by <a href="https://github.com/amzn">amzn</a></p>
+                <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+            </footer>
+        </div>
+
+
+        <script type="text/javascript">
+        $('#place-order').prop('disabled', true);
+        var billingAgreementId;
+
+        new OffAmazonPayments.Widgets.AddressBook({
+            sellerId: 'A1U65N017TFV5S',
+            agreementType: 'BillingAgreement',
+            onReady: function (billingAgreement) {
+                billingAgreementId = billingAgreement.getAmazonBillingAgreementId();
+
+                // render the consent and payment method widgets once the
+                // address book has loaded
+                new OffAmazonPayments.Widgets.Consent({
+                    sellerId: 'A1U65N017TFV5S',
+                    // amazonBillingAgreementId obtained from the Amazon Address Book widget.
+                    amazonBillingAgreementId: billingAgreementId,
+                    design: {
+                        designMode: 'responsive'
+                    },
+                    onReady: function (billingAgreementConsentStatus) {
+                        // Called after widget renders
+                        // getConsentStatus returns true or false
+                        // true – checkbox is selected
+                        // false – checkbox is unselected - default
+                    },
+                    onConsent: function (billingAgreementConsentStatus) {
+                        buyerBillingAgreementConsentStatus = billingAgreementConsentStatus.getConsentStatus();
+
+                        if(buyerBillingAgreementConsentStatus == 'true') {
+                            $('#place-order').prop('disabled', false);
+                        } else {
+                            $('#place-order').prop('disabled', true);
+                        }
+
+                    },
+                    onError: function (error) {
+                        // your error handling code
+                    }
+                }).bind("consentWidgetDiv");
+
+                new OffAmazonPayments.Widgets.Wallet({
+                    sellerId: 'A1U65N017TFV5S',
+                    amazonBillingAgreementId: billingAgreementId,
+                    onPaymentSelect: function (orderReference) {
+                    },
+                    design: {
+                        designMode: 'responsive'
+                    },
+                    onError: function (error) {
+                        // your error handling code
+                    }
+                }).bind("walletWidgetDiv");
+            },
+            onAddressSelect: function (orderReference) {
+            },
+            design: {
+                designMode: 'responsive'
+            },
+            onError: function (error) {
+                // your error handling code
+            }
+        }).bind("addressBookWidgetDiv");
+    </script>
+
+
+    </body>
+</html>

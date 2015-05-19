@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="description" content="Login and Pay with Amazon SDK Samples : Login and Pay with Amazon SDK Sample Code">
+
+        <script type="text/javascript">
+            var host = "amzn.github.io";
+            if ((host === window.location.host) && (window.location.protocol !== "https:"))
+                window.location.protocol = "https";
+        </script>
+        <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="javascripts/prism.js"></script>
+        <script type="text/javascript" src="javascripts/jquery.knob.js"></script>
+        <script type="text/javascript" src="javascripts/notify.js"></script>
+        <script type="text/javascript" src="javascripts/floater.js"></script>
+
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/reset.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/prism.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/font-mfizz.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                function getURLParameter(name, source) {
+                    return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
+                            '([^&;]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+                }
+                $("#access_token").val(getURLParameter("access_token", location.hash));
+            });
+        </script>
+
+
+        <title>Login and Pay with Amazon SDK Samples</title>
+    </head>
+
+    <body>
+        <div id='floater'>
+            <div class='float-icon float-lang-php'><i class="step icon-php"></i></div>
+            <div class='float-icon float-lang-python'><i class="step icon-python"></i></div>
+            <div class='float-icon float-lang-ruby'><i class="step icon-ruby"></i></div>
+        </div>
+
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+            <header class="inner">
+                <a id="forkme_banner" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples">View on GitHub</a>
+
+                <h1 id="project_title" style="margin-top:20px;">Pay with Amazon SDK Samples</h1>
+                <h2 id="project_tagline">Pay with Amazon Recurring Payments</h2>
+
+                <section id="downloads">
+                    <a class="zip_download_link" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples/zipball/master">Download this project as a .zip file</a>
+                    <a class="tar_download_link" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples/tarball/master">Download this project as a tar.gz file</a>
+                </section>
+            </header>
+        </div>
+
+        <input type="hidden" id="access_token" value="" />
+
+        <div id="main_content_wrap" class="outer"> <!-- wrap -->
+            <section id="main_content" class="inner">
+
+                <div id="section-content">
+
+                  <h2>Recurring Simulation</h2>
+    <p style="margin-top:40px;">This will make authorizations on the billing agreement every <strong>10</strong> seconds. We will
+    authorize $2.00 to simulate the recurring charge.</p>
+    <p>This concludes the simple checkout example. Click <a onclick='startOver();' href='#'>here</a> to start over.</p>
+    <div class="l-python alert alert-success" role="alert">Click here to see the <a href="https://github.com/amzn/login-and-pay-with-amazon-sdk-python">Python</a> SDK.</div>
+    <div class="l-ruby alert alert-success" role="alert">Click here to see the <a href="https://github.com/amzn/login-and-pay-with-amazon-sdk-ruby">Ruby</a> SDK.</div>
+    <div class="l-php alert alert-success" role="alert">Click here to see the <a href="https://github.com/amzn/login-and-pay-with-amazon-sdk-php">PHP</a> SDK.</div>
+    <div class="alert alert-danger" role="alert">The below simulation is an example. Your recurring API calls should be scheduled server side based on your custom integration.</div>
+    <div class="text-center" style="margin-top:10px;">
+        <button id="pause-cycle" class="btn btn-danger">Pause</button>
+    </div>
+    <div class="text-center" style="height:140px; padding-top:20px;">
+        <input type="text" data-width="100" value="50" class="dial" data-fgColor="#888" data-bgColor="#fafafa" style="padding:0; margin:0;" />
+    </div>
+    <div id="authorize-response"><pre><code>Waiting for authorization...</code></pre></div>
+    <div id="authorize"><pre><code id="test" class='language-markup'></code></pre></div>
+    <script type="text/javascript">
+        var amount = 500.00;
+        var countdown = 0;
+        $(function() {
+            $('.dial').knob({
+                'min': 0,
+                'max': 10,
+                'val': 0,
+                'readOnly': true
+            });
+        });
+        tick();
+        $("#authorize").hide();
+        function tick() {
+            $('.dial').val(countdown).trigger('change');
+            timeout = setTimeout('tick()', 1000);
+            countdown++;
+            if(countdown > 10) {
+                $.notify('Authorizing', {
+                    className: 'success',
+                    autoHide: true,
+                    globalPosition: 'top center',
+                    autoHideDelay: 3000
+                });
+                amount = amount-2.00;
+                $("#test").text('{\n\
+  "GetBillingAgreementDetailsResponse": {\n\
+      "GetBillingAgreementDetailsResult": {\n\
+          "BillingAgreementDetails": {\n\
+              "BillingAgreementConsent": "true",\n\
+              "BillingAgreementLimits": {\n\
+                  "TimePeriodEndDate": "2015-06-01T00:00:00Z",\n\
+                  "CurrentRemainingBalance": {\n\
+                      "CurrencyCode": "USD",\n\
+                      "Amount": "'+amount.toFixed(2)+'"\n\
+                  },\n\
+                  "TimePeriodStartDate": "2015-05-01T00:00:00Z",\n\
+                  "AmountLimitPerTimePeriod": {\n\
+                      "CurrencyCode": "USD",\n\
+                      "Amount": "500.00"\n\
+                  }\n\
+              },\n\
+              "CreationTimestamp": "2015-05-06T17:14:39.832Z",\n\
+              "Destination": {\n\
+                  "PhysicalDestination": {\n\
+                      "City": "Topeka",\n\
+                      "Name": "Mary Jones",\n\
+                      "PostalCode": "66615",\n\
+                      "AddressLine1": "4409 Main St.",\n\
+                      "CountryCode": "US",\n\
+                      "StateOrRegion": "KS",\n\
+                      "Phone": "800-000-0000"\n\
+                  },\n\
+                  "DestinationType": "Physical"\n\
+              },\n\
+              "AmazonBillingAgreementId": "C01-3552535-7861559",\n\
+              "BillingAgreementStatus": {\n\
+                  "State": "Open",\n\
+                  "LastUpdatedTimestamp": "2015-05-06T18:10:44.650Z"\n\
+              },\n\
+              "ReleaseEnvironment": "Sandbox",\n\
+              "SellerBillingAgreementAttributes": {\n\
+                  "StoreName": "Pay with Amazon Python SDK"\n\
+              },\n\
+              "Buyer": {\n\
+                  "Email": "mary@test.com",\n\
+                  "Name": "Mary Jones"\n\
+              }\n\
+          }\n\
+      },\n\
+      "ResponseMetadata": {\n\
+          "RequestId": "6075d43e-ad8e-4179-9528-39cf677f6f6b"\n\
+      }\n\
+  }\n\
+}');
+                clearTimeout(timeout);
+                $("#authorize-response").hide();
+                $("#authorize").fadeIn(500);
+                timeout = setTimeout('tick()', 1000);
+                countdown = 0;
+            }
+        }
+        $('#pause-cycle').on('click', function () {
+            if($(this).hasClass('btn-danger')) {
+                $(this).removeClass('btn-danger').addClass('btn-success');
+                $(this).text('Continue');
+                clearTimeout(timeout);
+            } else {
+                $(this).removeClass('btn-success').addClass('btn-danger');
+                $(this).text('Pause');
+                timeout = setTimeout('tick()', 1000);
+            }
+        });
+    </script>
+
+          </div>
+            <section class="inner">
+                <h2>Code</h2>
+                <p>Here you can see how we made the <em>Confirm</em> and <em>Authorize</em> calls.</p>
+
+                <pre class="l-python"><code class="language-python">
+pretty_confirm = None
+pretty_authorize = None
+
+response = client.confirm_billing_agreement(
+    amazon_billing_agreement_id='Amazon Billing Agreement Id')
+
+pretty_confirm = json.dumps(
+    json.loads(
+        response.to_json()),
+    indent=4)
+
+return render_template(&#x27;confirm.html&#x27;, confirm=pretty_confirm, authorize=pretty_authorize)</code></pre>
+
+
+                <pre class="l-php"><code class="language-php">
+namespace PayWithAmazon;
+
+session_start();
+
+// Instantiate the client object with the configuration
+$client = new Client($config);
+
+// Create the parameters array to set the order
+$requestParameters = array();
+$requestParameters['amazon_billing_agreement_id'] = 'AMAZON_BILLING_AGREEMENT_ID';
+
+// Confirm the order by making the ConfirmOrderReference API call
+$response = $client->confirmBillingAgreement($requestParameters);
+$json = json_decode($response->toJson());
+
+echo json_encode($json, JSON_PRETTY_PRINT);</code></pre>
+
+                <pre class="l-ruby"><code class="language-ruby">
+amazon_billing_agreement_id = 'AMAZON_BILLING_AGREEMENT_ID'
+
+response = client.confirm_billing_agreement(
+    amazon_billing_agreement_id)
+
+respons_hash = Hash.from_xml(response.body)
+puts response_hash</code></pre>
+
+<p>The <em>ConfirmBillingAgreement</em> API call does not return any special values. If it were
+unsuccessful you would see an error response.</p>
+<pre><code class='language-markup'>{
+    &#34;ConfirmBillingAgreementResponse&#34;: {
+        &#34;ConfirmBillingAgreementResult&#34;: null,
+        &#34;ResponseMetadata&#34;: {
+            &#34;RequestId&#34;: &#34;65ef0a6c-a0ed-436d-b8b6-89c1c4c62fed&#34;
+        }
+    }
+} </code></pre>
+
+<p>This is how to make an authorization on the billing agreement.</p>
+<pre class="l-python"><code class="language-python">
+response = client.authorize_on_billing_agreement(
+    amazon_billing_agreement_id=session['billing_agreement_id'],
+    authorization_reference_id=rand(),
+    authorization_amount='1.99',
+    seller_authorization_note='Python SDK payment authorization.',
+    transaction_timeout=0,
+    capture_now=True)
+
+response = client.get_billing_agreement_details(
+    amazon_billing_agreement_id=session['billing_agreement_id'],
+    address_consent_token=session['access_token'])
+
+pretty = json.dumps(
+    json.loads(
+        response.to_json()),
+    indent=4)
+return pretty
+</code></pre>
+
+<pre class="l-ruby"><code class="language-ruby">
+amount = '1.99'
+
+response = client.authorize_on_billing_agreement(
+    amazon_billing_agreement_id,
+    authorization_reference_id,
+    amount,
+    seller_authorization_note='Ruby SDK payment authorization',
+    transaction_timeout: 0,
+    capture_now: true)
+
+response = client.get_billing_agreement_details(
+    amazon_billing_agreement_id,
+    address_consent_token: address_consent_token)
+
+respons_hash = Hash.from_xml(response.body)
+puts response_hash</code></pre>
+
+
+<pre class="l-php"><code class="language-php">
+namespace PayWithAmazon;
+
+session_start();
+
+// Instantiate the client object with the configuration
+$client = new Client($config);
+
+// Create the parameters array to set the order
+$requestParameters = array();
+
+// Required parameters
+$requestParameters['amazon_billing_agreement_id'] = $_SESSION['amazon_billing_agreement_id'];
+$requestParameters['authorization_amount']        = '1.99';
+$requestParameters['authorization_reference_id']  = uniqid('A01_REF_');
+
+// Optional parameters
+$requestParameters['seller_authorization_note'] = 'Authorizing and capturing the payment';
+$requestParameters['transaction_timeout']       = 0;
+$requestParameters['capture_now']               = true;
+$requestParameters['inherit_shipping_address']  = true;
+$requestParameters['seller_note']               = 'sample for Recurring Payment';
+$requestParameters['seller_order_id']           = '1234-RecExample-Order';
+$requestParameters['store_name']                = 'Saurons fair in Mordor';
+
+$response = $client->authorizeOnBillingAgreement($requestParameters);
+
+// Display the Billing Agreement Details Result with the below parameters
+$requestParameters = array();
+$requestParameters['amazon_billing_agreement_id'] = 'AMAZON_BILLING_AGREEMENT_ID';
+$requestParameters['address_consent_token']       = 'ACCESS_TOKEN';
+
+$response = $client->getBillingAgreementDetails($requestParameters);
+
+// Convert the response to Json
+$json     = json_decode($response->toJson());
+echo json_encode($json, JSON_PRETTY_PRINT);</code></pre>
+
+            </section>
+
+        </div><!-- end wrap -->
+
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+            <footer class="inner">
+                <p class="copyright">Login and Pay with Amazon SDK Samples maintained by <a href="https://github.com/amzn">amzn</a></p>
+                <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+            </footer>
+        </div>
