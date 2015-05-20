@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset='utf-8'>
+        <meta http-equiv="X-UA-Compatible" content="chrome=1">
+        <meta name="description" content="Login and Pay with Amazon SDK Samples : Login and Pay with Amazon SDK Sample Code">
+
+        <script type="text/javascript">
+            var host = "amzn.github.io";
+            if ((host === window.location.host) && (window.location.protocol !== "https:"))
+                window.location.protocol = "https";
+
+            window.onAmazonLoginReady = function () {
+                amazon.Login.setClientId('amzn1.application-oa2-client.fa79e58459cf4a30aa478fc8f79e0ef7');
+            };
+        </script>
+        <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
+
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/javascripts/prism.js"></script>
+
+        <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/reset.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/0.0.1/prism.min.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/stylesheets/prism.css">
+        <link rel="stylesheet" type="text/css" media="screen" href="https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/stylesheets/stylesheet.css">
+
+        <title>Login and Pay with Amazon SDK Samples</title>
+    </head>
+
+    <body>
+
+        <!-- HEADER -->
+        <div id="header_wrap" class="outer">
+            <header class="inner">
+                <a id="forkme_banner" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples">View on GitHub</a>
+
+                <h1 id="project_title" style="margin-top:20px;">Pay with Amazon SDK Samples</h1>
+                <h2 id="project_tagline">Pay with Amazon Simple Checkout</h2>
+
+                <section id="downloads">
+                    <a class="zip_download_link" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples/zipball/master">Download this project as a .zip file</a>
+                    <a class="tar_download_link" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples/tarball/master">Download this project as a tar.gz file</a>
+                </section>
+            </header>
+        </div>
+
+        <div id="main_content_wrap" class="outer"> <!-- wrap -->
+            <section id="main_content" class="inner">
+
+                <div id="section-content">
+                    <h2>Test Cart</h2>
+
+
+                    <p style="margin-top:20px;">This is a test cart to show which calls need to
+                        be made to allow a buyer to make a purchase. </p>
+                    <p>Note: This is a <strong>sandbox</strong> transaction. Your <strong>payment method</strong> will <strong>not be charged</strong>.</p>
+                    <div style="margin-top:25px;">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Description</th>
+                                    <th class="text-center">Quantity</th>
+                                    <th class="text-center">Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><img class="media-object" src="https://cloud.githubusercontent.com/assets/9828472/7424291/52ca5edc-ef54-11e4-8884-872b89711b55.jpg" alt=""></td>
+                                    <td>
+                                        <div><strong>Baldwin Entry Door Knob</strong></div>
+                                        <div><em>Baldwin's Classic knob gives a comforting and invitingly warm impression. Clean lines and simple, architecturally-inspired designs exemplify timeless sophistication.</em></div>
+
+                                    </td>
+                                    <td class="text-center">1</td>
+                                    <td class="text-center">175.00</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="text-center" id="AmazonPayButton" style="margin-top:20px;"></div>
+                    <div class="text-center" style="margin-top:20px;">
+                        <p id="login-state-msg"></p>
+                    </div>
+                    <div class="text-center" style="margin-top:10px;">
+                    		<button onclick="verifyLoggedIn(true)" style="font-size:18px; font-weight:bold; padding: 10px;">Verify Logged In</button>
+                    		<button onclick="amazon.Login.logout(); location.href='https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/login_and_pay/lpa-login.html';" style="font-size:18px; font-weight:bold; padding: 10px;">Logout</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="inner">
+                <h2>Code</h2>
+                <p>Create the button container.</p>
+                <pre><code class="language-markup">&#x3C;div id=&#x22;AmazonPayButton&#x22;&#x3E;&#x3C;/div&#x3E;</code></pre>
+                <p>Add script to set the client Id.</p>
+                <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId(&#x27;CLIENT_ID&#x27;);
+        amazon.Login.setUseCookie(true);
+    };
+&#x3C;/script&#x3E;</code></pre>
+
+                <p>Import widgets javascript. This must be loaded after you set the client Id above.</p>
+                <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;</code></pre>
+
+                <p>Render the button. Note: You will need to add your domain to 'Allowed JavaScript
+                    Origins' in Seller Central. If you are testing locally you can use 'http://localhost'.
+                    Production sites must have a valid certificate and use https.</p>
+                <pre><code class="language-javascript">&lt;script type='text/javascript'&gt;
+    var authRequest;
+    OffAmazonPayments.Button(&quot;AmazonPayButton&quot;, &quot;MERCHANT_ID&quot;, {
+        type: &quot;PwA&quot;,
+        authorization: function () {
+            loginOptions = { scope: &quot;profile postal_code payments:widget payments:shipping_address&quot;, popup: true };
+            authRequest = amazon.Login.authorize(loginOptions, &quot;https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/set.html&quot;);
+        },
+        onError: function (error) {
+            // something bad happened
+        }
+    });
+&lt;/script&gt;</code></pre>
+
+                <h3>Logged In? (optional Get User Profile with Javascript)</h3>
+
+                <p>In order to see if a user is logged, and provide a link to log in, simply re-use the authorization function logic.</p>
+                <pre><code class="language-javascript">&lt;script type='text/javascript'&gt;
+    function verifyLoggedIn() {
+        // if you want to display a message.
+        var msgElem = document.getElementById("login-state-msg");
+
+        var options = {
+            scope: "profile postal_code payments:widget payments:shipping_address",
+            popup: true,
+            interactive: 'never'
+        };
+
+        // check if we are logged in
+        authRequest = amazon.Login.authorize (options, function(response) {
+            // this code is executed ASYNCHRONOUSLY
+
+            if ( response.error ) {
+                // USER NOT LOGGED IN
+                console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
+                msgElem.innerHTML = "NOT logged in yet. Click 'Pay with Amazon' or Go to <a href=\"MY_LOGIN_PAGE.html\">Login</a> screen.";
+            else {
+                // USER IS LOGGED IN
+                console.log("verifyLoggedIn() - SESSION ACTIVE - " + new Date());
+
+                // optionally, get the profile info
+                console.dir('access_token= ' + response.access_token);
+
+                amazon.Login.retrieveProfile(function (response) {
+                    // Display profile information.
+                    console.dir('CustomerId= ' + response.profile.CustomerId);
+                    console.dir('Name= ' + response.profile.Name);
+                    console.dir('PostalCode= ' + response.profile.PostalCode);
+                    console.dir('PrimaryEmail= ' + response.profile.PrimaryEmail);
+
+                    msgElem.innerHTML = "Hello " + response.profile.Name + "! Just click Pay!";
+                });
+            }
+        });
+    }
+&lt;/script&gt;</code></pre>
+
+<h3>Log Out</h3>
+<p>Logging out is simple.</p>
+<pre>
+  <code class="language-javascript">
+amazon.Login.logout();
+  </code>
+</pre>
+
+
+            </section>
+
+        </div><!-- end wrap -->
+
+        <!-- FOOTER  -->
+        <div id="footer_wrap" class="outer">
+            <footer class="inner">
+                <p class="copyright">Login and Pay with Amazon SDK Samples maintained by <a href="https://github.com/amzn">amzn</a></p>
+                <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+            </footer>
+        </div>
+
+
+        <script type='text/javascript'>
+            var authRequest;
+            OffAmazonPayments.Button("AmazonPayButton", "AQR8184NJXADU", {
+                type: "PwA",
+                width: 100,
+                height: 50,
+                authorization: function () {
+                    loginOptions = {scope: "profile postal_code payments:widget payments:shipping_address", popup: true};
+                    authRequest = amazon.Login.authorize(loginOptions, "https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/set.html");
+                },
+                onError: function (error) {
+                    // something bad happened
+                }
+            });
+        </script>
+
+<script>
+function verifyLoggedIn(showAlert) {
+    var msgElem = document.getElementById("login-state-msg");
+		var options = {
+      scope: "profile postal_code payments:widget payments:shipping_address",
+      popup: true,
+      interactive: 'never'
+    };
+
+		console.log("verifyLoggedIn() - about to call login.authorize - " + new Date());
+
+		// check if we are logged in
+		authRequest = amazon.Login.authorize (options, function(response) {
+			// this code is executed ASYNCHRONOUSLY
+			console.log("verifyLoggedIn() - authorize callback - " + new Date());
+			if ( response.error ) {
+				// USER NOT LOGGED IN
+				console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
+        msgElem.innerHTML = "NOT logged in yet. Click 'Pay with Amazon' or Go to <a href=\"lpa-login.html\">Login</a> screen.";
+        if (showAlert) {
+				    alert("Session NOT Active");
+        }
+			} else {
+				// USER IS LOGGED IN
+				console.log("verifyLoggedIn() - SESSION ACTIVE - " + new Date());
+
+        // optionally, get the profile info
+        console.dir('access_token= ' + response.access_token);
+
+        amazon.Login.retrieveProfile(function (response) {
+      	   // Display profile information.
+  				 console.dir('CustomerId= ' + response.profile.CustomerId);
+           console.dir('Name= ' + response.profile.Name);
+           console.dir('PostalCode= ' + response.profile.PostalCode);
+           console.dir('PrimaryEmail= ' + response.profile.PrimaryEmail);
+
+           msgElem.innerHTML = "Hello <strong>" + response.profile.Name + "</strong>! Just click Pay!";
+  			});
+
+        if (showAlert) {
+				    alert("Session IS Active");
+        }
+			}
+		});
+		console.log("verifyLoggedIn() - Finished call to login.authorize - " + new Date());
+	}
+
+verifyLoggedIn(false);
+</script>
+
+    </body>
+</html>
