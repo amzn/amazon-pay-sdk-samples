@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $(window).scroll(function () {
-        $('#floater').animate({top: $(window).scrollTop() + 50 + "px"}, {queue: false, duration: 600});
+        $('#floater').animate({top: $(window).scrollTop() + 60 + "px"}, {queue: false, duration: 600});
     });
 
     $('.float-icon').hover(function () {
@@ -25,7 +25,7 @@ $(document).ready(function () {
         }
     });
 
-    $('#floater').animate({top: $(window).scrollTop() + 50 + "px"}, {queue: false, duration: 600});
+    $('#floater').animate({top: $(window).scrollTop() + 60 + "px"}, {queue: false, duration: 600});
     $('.float-lang-php').addClass('float-active')
     switchPhp();
 });

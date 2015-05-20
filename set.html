@@ -20,6 +20,7 @@
         <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
         <script type="text/javascript" src="javascripts/prism.js"></script>
+        <script type="text/javascript" src="javascripts/notify.js"></script>
         <script type="text/javascript" src="javascripts/floater.js"></script>
 
         <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/reset.css">
@@ -351,6 +352,17 @@ return response_hash</code></pre>
                     // your error handling code
                 }
             }).bind("walletWidgetDiv");
+        </script>
+
+        <script type="text/javascript">
+          $(document).ready(function(){
+            $.notify('Use the icons below to switch between languages!', {
+                className: 'info',
+                autoHide: true,
+                globalPosition: 'top right',
+                autoHideDelay: 4000
+            });
+          });
         </script>
 
 
