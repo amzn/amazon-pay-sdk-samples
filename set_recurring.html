@@ -114,7 +114,7 @@
 &#x3C;div id=&#x22;walletWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
 &#x3C;div id=&#x22;consentWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;</code></pre>
 
-                        <p>Add script to set the client Id just as you did for displaying the Pay with Amazon button.</p>
+                        <p>Add script to set the <strong>CLIENT_ID</strong> just as you did for displaying the Pay with Amazon button.</p>
 <pre><code class="language-javascript">
 &#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
   window.onAmazonLoginReady = function () {
@@ -123,7 +123,7 @@
   };
 &#x3C;/script&#x3E;</code></pre>
 
-<p>Import widgets javascript. This must be loaded after you set the client Id above.</p>
+<p>Copy/paste the javascript code below to import the widgets.js. This must be pasted after you set the client Id above.</p>
 <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;</code></pre>
 
 <p>Add the widgets code. You can use the <em>onOrderReferenceCreate</em> method to
