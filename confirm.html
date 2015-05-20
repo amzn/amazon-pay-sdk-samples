@@ -118,7 +118,6 @@ $requestParameters = array();
 
 // Refer to GetDetails.php where the Amazon Order Reference ID was set
 $requestParameters['amazon_order_reference_id'] = 'AMAZON_ORDER_REFERENCE_ID';
-$requestParameters['mws_auth_token'] = null;
 
 // Confirm the order by making the ConfirmOrderReference API call
 $response = $client->confirmOrderReference($requestParameters);
