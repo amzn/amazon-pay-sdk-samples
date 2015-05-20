@@ -115,7 +115,7 @@
                         <pre><code class="language-markup">&#x3C;div id=&#x22;addressBookWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
 &#x3C;div id=&#x22;walletWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;</code></pre>
 
-                <p>Add script to set the client Id just as you did for displaying the Pay with Amazon button.</p>
+                <p>Add script to set the <pre>CLIENT_ID</pre> just as you did for displaying the Pay with Amazon button.</p>
                 <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
     window.onAmazonLoginReady = function () {
         amazon.Login.setClientId('CLIENT_ID');
