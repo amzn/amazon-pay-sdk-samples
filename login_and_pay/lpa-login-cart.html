@@ -199,7 +199,7 @@ amazon.Login.logout();
                 height: 50,
                 authorization: function () {
                     loginOptions = {scope: "profile postal_code payments:widget payments:shipping_address", popup: true};
-                    authRequest = amazon.Login.authorize(loginOptions, "https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/set.html.html");
+                    authRequest = amazon.Login.authorize(loginOptions, "https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/set.html");
                 },
                 onError: function (error) {
                     // something bad happened
