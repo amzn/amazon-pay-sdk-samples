@@ -183,9 +183,17 @@ $(function() {
                     <h2>Test Login</h2>
 
                     <p style="margin-top:20px;">This is a test log in to show how quickly customers can login or create an account.</p>
-                    <p>Note: This is a <strong>sandbox</strong> and <strong>does not</strong> use actual Amazon accounts.</p>
-                    <div style="margin-top:25px;">
+                    <p>Note: This is a <strong>sandbox</strong> and <strong>does not</strong> use actual Amazon accounts. You can use the following credentials.</p>
 
+                    <div class="text-center" style="margin-top:20px;">
+                        <div class="text-left">
+                            <pre>Email address: payment-test@amazon.com
+Password:      test123</pre>
+                        </div>
+                  </div>
+
+
+                    <div style="margin-top:25px;">
                       				<div class="panel panel-login">
                       					<div class="panel-heading">
                       						<div class="row">
@@ -198,20 +206,25 @@ $(function() {
                       						</div>
                       						<hr>
                       					</div>
+                                <div class="text-center" id="AmazonLoginButton" style="margin-top:20px;"></div>
+
+                                <div class="text-center">
+                                  <strong>or</strong>
+                                </div>
                       					<div class="panel-body">
                       						<div class="row">
                       							<div class="col-lg-12">
                       								<form id="login-form" action="#" method="post" role="form" style="display: block;">
                       									<div class="form-group">
-                      										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                      										<input type="text" readonly="readonly" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                       									</div>
                       									<div class="form-group">
-                      										<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                      										<input type="password" readonly="readonly" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
                       									</div>
                       									<div class="form-group">
                       										<div class="row">
                       											<div class="col-sm-6 col-sm-offset-3">
-                      												<input type="submit" name="login-submit" id="login-submit" class="form-control btn btn-login" value="Log In">
+                      												<input type="button" onclick="alert('Can\'t touch this! Login with Amazon. :)');" name="login-submit" id="login-submit" class="form-control btn btn-login" value="Log In">
                                             </div>
                       										</div>
                       									</div>
@@ -223,47 +236,31 @@ $(function() {
                                     <div class="col-lg-12">
                       								<form id="register-form" action="#" method="post" role="form" style="display: none;">
                       									<div class="form-group">
-                      										<input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
+                      										<input type="text" readonly="readonly" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="">
                       									</div>
                       									<div class="form-group">
-                      										<input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
+                      										<input type="email" readonly="readonly" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="">
                       									</div>
                       									<div class="form-group">
-                      										<input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
+                      										<input type="password" readonly="readonly" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
                       									</div>
                       									<div class="form-group">
-                      										<input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
+                      										<input type="password" readonly="readonly" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password">
                       									</div>
                       									<div class="form-group">
                       										<div class="row">
                       											<div class="col-sm-6 col-sm-offset-3">
-                      												<input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Sign Up">
+                      												<input type="button" onclick="alert('Can\'t touch this! Login with Amazon. :)');" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Sign Up">
                       											</div>
                       										</div>
                       									</div>
                       								</form>
-
-                                      <div class="text-center">
-                                        <strong>or</strong>
-                                      </div>
-                                      <div class="text-center" id="AmazonLoginButton" style="margin-top:20px;"></div>
                       							</div>
                       						</div>
                       					</div>
                       				</div>
 
                     </div>
-
-                    <div class="text-center" style="margin-top:20px;">
-                        <p>When logging in, use the following credentials.</p>
-                        <div class="text-left">
-                            <pre>Email address: payment-test@amazon.com
-Password:      test123</pre>
-                        </div>
-                  </div>
-
-                  <div class="text-center" id="AmazonLoginButton2" style="margin-top:20px;"></div>
-
                 </div>
             </section>
 
@@ -280,7 +277,12 @@ Password:      test123</pre>
 &#x3C;/script&#x3E;</code></pre>
 
                 <p>Import widgets javascript. This must be loaded after you set the client Id above.</p>
+                <h5>USA</h5>
                 <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;</code></pre>
+                <h5>UK</h5>
+                <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;</code></pre>
+                <h5>DE</h5>
+                <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;</code></pre>
 
                 <p>Render the button. Note: You will need to add your domain to 'Allowed JavaScript
                     Origins' in Seller Central. If you are testing locally you can use 'http://localhost'.
@@ -292,7 +294,7 @@ Password:      test123</pre>
         color: &quot;Gold&quot;,
         authorization: function () {
             loginOptions = { scope: &quot;profile postal_code payments:widget payments:shipping_address&quot;, popup: true };
-            authRequest = amazon.Login.authorize(loginOptions, &quot;https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/lpa-login-cart.html&quot;);
+            authRequest = amazon.Login.authorize(loginOptions, &quot;https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/login_and_pay/lpa-login-cart.html&quot;);
         },
         onError: function (error) {
             // something bad happened
@@ -331,8 +333,6 @@ Password:      test123</pre>
                 }
             });
         </script>
-
-
 
     </body>
 </html>

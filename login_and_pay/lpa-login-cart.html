@@ -88,7 +88,6 @@
                         <p id="login-state-msg"></p>
                     </div>
                     <div class="text-center" style="margin-top:10px;">
-                    		<button onclick="verifyLoggedIn(true)" style="font-size:18px; font-weight:bold; padding: 10px;">Verify Logged In</button>
                     		<button onclick="amazon.Login.logout(); location.href='https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/login_and_pay/lpa-login.html';" style="font-size:18px; font-weight:bold; padding: 10px;">Logout</button>
                     </div>
                 </div>
@@ -106,8 +105,14 @@
     };
 &#x3C;/script&#x3E;</code></pre>
 
+
                 <p>Import widgets javascript. This must be loaded after you set the client Id above.</p>
+                <h5>USA</h5>
                 <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;</code></pre>
+                <h5>UK</h5>
+                <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;</code></pre>
+                <h5>DE</h5>
+                <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-eu.payments-amazon.com/OffAmazonPayments/uk/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;</code></pre>
 
                 <p>Render the button. Note: You will need to add your domain to 'Allowed JavaScript
                     Origins' in Seller Central. If you are testing locally you can use 'http://localhost'.
@@ -126,9 +131,10 @@
     });
 &lt;/script&gt;</code></pre>
 
-                <h3>Logged In? (optional Get User Profile with Javascript)</h3>
-
-                <p>In order to see if a user is logged, and provide a link to log in, simply re-use the authorization function logic.</p>
+                <h3>Is the customer still logged in?</h3>
+                <button onclick="verifyLoggedIn(true)" style="font-size:18px; font-weight:bold; padding: 10px;">Verify Logged In</button>
+                <p>In order to see if a user's session is active, and provide a link to log in, simply re-use the authorization function logic.</p>
+                <h4>Get user profile with Javascript</h4>
                 <pre><code class="language-javascript">&lt;script type='text/javascript'&gt;
     function verifyLoggedIn() {
         // if you want to display a message.
@@ -148,7 +154,7 @@
                 // USER NOT LOGGED IN
                 console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
                 msgElem.innerHTML = "NOT logged in yet. Click 'Pay with Amazon' or Go to <a href=\"MY_LOGIN_PAGE.html\">Login</a> screen.";
-            else {
+            } else {
                 // USER IS LOGGED IN
                 console.log("verifyLoggedIn() - SESSION ACTIVE - " + new Date());
 
@@ -225,7 +231,7 @@ function verifyLoggedIn(showAlert) {
 			if ( response.error ) {
 				// USER NOT LOGGED IN
 				console.log("verifyLoggedIn() - SESSION NOT ACTIVE - " + new Date());
-        msgElem.innerHTML = "NOT logged in yet. Click 'Pay with Amazon' or Go to <a href=\"lpa-login.html\">Login</a> screen.";
+        msgElem.innerHTML = "NOT logged in yet. Click 'Pay with Amazon' or Go to <a href=\"https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/login_and_pay/lpa-login.html\">Login</a> screen.";
         if (showAlert) {
 				    alert("Session NOT Active");
         }
