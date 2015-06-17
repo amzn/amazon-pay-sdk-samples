@@ -127,7 +127,7 @@
                     obtain information about the order reference Id.</p>
                 <pre><code class="language-javascript">&#x3C;script type=&#x22;text/javascript&#x22;&#x3E;
     new OffAmazonPayments.Widgets.AddressBook({
-        sellerId: 'MERCHANT_ID';,
+        sellerId: 'MERCHANT_ID',
         onOrderReferenceCreate: function (orderReference) {
            orderReferenceId = orderReference.getAmazonOrderReferenceId();
         },
@@ -193,12 +193,12 @@ return pretty</code></pre>
 
 session_start();
 
-require_once '../PayWithAmazon/Client.php';
+require_once '/PayWithAmazon/Client.php';
 
 $config =array( 'merchant_id'   => 'MERCHANT_ID',
                 'access_key'    => 'ACCESS_KEY',
                 'secret_key'    => 'SECRET_KEY',
-                'client_id'     => 'CLIENT_ID'
+                'client_id'     => 'CLIENT_ID',
                 'currency_code' => 'usd',
                 'region'        => 'us',
                 'sandbox'   => true);
