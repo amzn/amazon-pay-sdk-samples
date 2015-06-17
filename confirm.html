@@ -151,7 +151,7 @@ if($client->success)
     $responsearray['authorize'] = json_decode($response->toJson());
 }
 
-// If the API call was a success make the Capture API call
+// If the Authorize API call was a success make the Capture API call
 if($client->success)
 {
     $requestParameters['amazon_authorization_id'] = 'Parse the Authorize Response for this id';

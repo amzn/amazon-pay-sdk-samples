@@ -252,6 +252,12 @@ response = client.authorize_on_billing_agreement(
     transaction_timeout=0,
     capture_now=True)
 
+if response.success:
+    response = client.capture(
+        amazon_authorization_id= 'Parse the Auhtorize response for this id',
+        capture_reference_id=rand(),
+        capture_amount=&#x27;1.99&#x27;)
+
 response = client.get_billing_agreement_details(
     amazon_billing_agreement_id=session['billing_agreement_id'],
     address_consent_token=session['access_token'])
@@ -272,7 +278,18 @@ response = client.authorize_on_billing_agreement(
     amount,
     seller_authorization_note='Ruby SDK payment authorization',
     transaction_timeout: 0,
-    capture_now: true)
+    capture_now: false)
+    
+amazon_authorization_id = response.get_element('AuthorizeOnBillingAgreementResponse/AuthorizeOnBillingAgreementResult/AuthorizationDetails','AmazonAuthorizationId')
+capture_reference_id = "Your Unique Reference Id"
+amount = '1.99'
+
+if response.success
+    response = client.capture(
+        amazon_authorization_id,
+        capture_reference_id,
+        amount)
+end
 
 response = client.get_billing_agreement_details(
     amazon_billing_agreement_id,
@@ -296,18 +313,30 @@ $requestParameters = array();
 // Required parameters
 $requestParameters['amazon_billing_agreement_id'] = $_SESSION['amazon_billing_agreement_id'];
 $requestParameters['authorization_amount']        = '1.99';
-$requestParameters['authorization_reference_id']  = uniqid('A01_REF_');
+$requestParameters['authorization_reference_id']  = 'Your Unique Reference Id';
 
 // Optional parameters
-$requestParameters['seller_authorization_note'] = 'Authorizing and capturing the payment';
-$requestParameters['transaction_timeout']       = 0;
-$requestParameters['capture_now']               = true;
+$requestParameters['seller_authorization_note'] = 'Authorizing the payment';
+$requestParameters['transaction_timeout']       = 1440;
+$requestParameters['capture_now']               = false;
 $requestParameters['inherit_shipping_address']  = true;
 $requestParameters['seller_note']               = 'sample for Recurring Payment';
 $requestParameters['seller_order_id']           = '1234-RecExample-Order';
 $requestParameters['store_name']                = 'Saurons fair in Mordor';
 
 $response = $client->authorizeOnBillingAgreement($requestParameters);
+
+// If the AuthorizOnBillingAgreement API call was a success make the Capture API call
+if($client->success)
+{
+    $requestParameters['amazon_authorization_id'] = 'Parse the Authorize Response for this id';
+    $requestParameters['capture_amount'] = '1.99';
+    $requestParameters['currency_code'] = 'USD';
+    $requestParameters['capture_reference_id'] = 'Your Unique Reference Id';
+    $requestParameters['seller_capture_note'] = 'Capture Test';
+
+    $response = $client->capture($requestParameters);
+}
 
 // Display the Billing Agreement Details Result with the below parameters
 $requestParameters = array();
