@@ -110,7 +110,7 @@ pretty_authorize = json.dumps(
         
 if response.success:
     response = client.capture(
-        amazon_authorization_id= 'AMAZON_AUTHORIZATION_ID',
+        amazon_authorization_id= 'Parse the Auhtorize response for this id',
         capture_reference_id=rand(),
         capture_amount=&#x27;175.00&#x27;)
 
@@ -156,7 +156,9 @@ if($client->success)
 {
     $requestParameters['amazon_authorization_id'] = 'Parse the Authorize Response for this id';
     $requestParameters['capture_amount'] = '175.00';
+    $requestParameters['currency_code'] = 'USD';
     $requestParameters['capture_reference_id'] = 'Your Unique Reference Id';
+    $requestParameters['seller_capture_note'] = 'Capture Test';
 
     $response = $client->capture($requestParameters);
     $responsearray['capture'] = json_decode($response->toJson());
