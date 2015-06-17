@@ -242,7 +242,8 @@ unsuccessful you would see an error response.</p>
     }
 } </code></pre>
 
-<p>This is how to make an authorization on the billing agreement.</p>
+<p>This shows how to make Authorize and Capture API calls for an Amazon Billing Agreement Id.</p>
+                <div class="well well-sm">For digital goods you can set the <em>CaptureNow</em> parameter to true and <em>TransactionTimeout</em> parameter to 0 when making the <em>AuthorizeOnBillingAgreement</em> API call.</div>
 <pre class="l-python"><code class="language-python">
 response = client.authorize_on_billing_agreement(
     amazon_billing_agreement_id=session['billing_agreement_id'],
