@@ -141,10 +141,10 @@ $responsearray['confirm'] = json_decode($response->toJson());
 if($client->success)
 {
     $requestParameters['authorization_amount'] = '175.00';
-    $requestParameters['authorization_reference_id'] = uniqid('A01_REF_');
-    $requestParameters['seller_Authorization_Note'] = 'Authorizing and capturing the payment';
-    $requestParameters['transaction_timeout'] = 0;
-    $requestParameters['capture_now'] = true;
+    $requestParameters['authorization_reference_id'] = 'Your Unique Reference Id';
+    $requestParameters['seller_authorization_note'] = 'Authorizing and capturing the payment';
+    $requestParameters['transaction_timeout'] = 1440;
+    $requestParameters['capture_now'] = false;
 
     $response = $client->authorize($requestParameters);
     $responsearray['authorize'] = json_decode($response->toJson());
@@ -153,9 +153,9 @@ if($client->success)
 // If the API call was a success make the Capture API call
 if($client->success)
 {
-    $requestParameters['amazon_authorization_id'] = '';
+    $requestParameters['amazon_authorization_id'] = 'Parse the Authorize Response for this id';
     $requestParameters['capture_amount'] = '175.00';
-    $requestParameters['capture_reference_id'] = uniqid('A01_REF_');
+    $requestParameters['capture_reference_id'] = 'Your Unique Reference Id';
 
     $response = $client->capture($requestParameters);
     $responsearray['capture'] = json_decode($response->toJson());
