@@ -100,15 +100,26 @@ if response.success:
         authorization_reference_id=rand(),
         authorization_amount=&#x27;175.00&#x27;,
         transaction_timeout=0,
-        capture_now=True)
-
+        capture_now=False)
+        
 pretty_authorize = json.dumps(
+    json.loads(
+        response.to_json()),
+    indent=4)
+        
+if response.success:
+    response = client.capture(
+        amazon_authorization_id= 'AMAZON_AUTHORIZATION_ID',
+        capture_reference_id=rand(),
+        capture_amount=&#x27;175.00&#x27;)
+
+pretty_capture = json.dumps(
     json.loads(
         response.to_json()),
     indent=4)
 
 return render_template(
-    &#x27;confirm.html&#x27;, confirm=pretty_confirm, authorize=pretty_authorize)</code></pre>
+    &#x27;confirm.html&#x27;, confirm=pretty_confirm, authorize=pretty_authorize, capture=pretty_capture)</code></pre>
 
 
                 <pre class="l-php"><code class="language-php">namespace PayWithAmazon;
@@ -126,7 +137,7 @@ $response = $client->confirmOrderReference($requestParameters);
 
 $responsearray['confirm'] = json_decode($response->toJson());
 
-// If the API call was a success make the Authorize (with Capture) API call
+// If the API call was a success make the Authorize API call
 if($client->success)
 {
     $requestParameters['authorization_amount'] = '175.00';
@@ -137,6 +148,17 @@ if($client->success)
 
     $response = $client->authorize($requestParameters);
     $responsearray['authorize'] = json_decode($response->toJson());
+}
+
+// If the API call was a success make the Capture API call
+if($client->success)
+{
+    $requestParameters['amazon_authorization_id'] = '';
+    $requestParameters['capture_amount'] = '175.00';
+    $requestParameters['capture_reference_id'] = uniqid('A01_REF_');
+
+    $response = $client->capture($requestParameters);
+    $responsearray['capture'] = json_decode($response->toJson());
 }
 
 // Echo the Json encoded array for the Ajax success
@@ -164,7 +186,23 @@ if response.success
 end
 
 respons_hash = Hash.from_xml(response.body)
-return response_hash</code></pre>
+return response_hash
+
+amazon_authorization_id = response.get_element('AuthorizeResponse/AuthorizeResult/AuthorizationDetails','AmazonAuthorizationId')
+capture_reference_id = "Your Unique Reference Id"
+amount = '175.00'
+
+if response.success
+    response = client.capture(
+        amazon_authorization_id,
+        capture_reference_id,
+        amount)
+end
+
+respons_hash = Hash.from_xml(response.body)
+return response_hash
+
+</code></pre>
 
                 <p>The <em>Confirm</em> API call does not return any special values. If it were
                     unsuccessful you would see an error response.</p>
@@ -176,47 +214,79 @@ return response_hash</code></pre>
     }
 }</code></pre>
 
-                <p>The <em>Authorize</em> API call will authorize the order reference. Instead
-                    of making a separate <em>Capture</em> API call we can set the <strong>CaptureNow</strong>
-                    parameter to <strong>True</strong> and the funds will be captured in the same call.</p>
+                <p>The <em>Authorize</em> API call will authorize the order reference id. You will then
+                    make a separate <em>Capture</em> API call to capture the funds.</p>
                 <pre><code class="language-markup">{
-    &#34;AuthorizeResponse&#34;: {
-        &#34;ResponseMetadata&#34;: {
-            &#34;RequestId&#34;: &#34;c8e2aab0-5670-43a8-b477-eace0300988a&#34;
+  "AuthorizeResponse": {
+    "xmlns": "http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01",
+    "AuthorizeResult": {
+      "AuthorizationDetails": {
+        "AuthorizationAmount": {
+          "CurrencyCode": "USD",
+          "Amount": "175.00"
         },
-        &#34;AuthorizeResult&#34;: {
-            &#34;AuthorizationDetails&#34;: {
-                &#34;AmazonAuthorizationId&#34;: &#34;S01-0412594-3843978-A024491&#34;,
-                &#34;SellerAuthorizationNote&#34;: null,
-                &#34;CapturedAmount&#34;: {
-                    &#34;Amount&#34;: &#34;0&#34;,
-                    &#34;CurrencyCode&#34;: &#34;USD&#34;
-                },
-                &#34;AuthorizationReferenceId&#34;: &#34;2142&#34;,
-                &#34;CreationTimestamp&#34;: &#34;2015-04-23T19:28:29.184Z&#34;,
-                &#34;IdList&#34;: {
-                    &#34;member&#34;: &#34;S01-0412594-3843978-C024491&#34;
-                },
-                &#34;CaptureNow&#34;: &#34;true&#34;,
-                &#34;SoftDescriptor&#34;: &#34;AMZ*test&#34;,
-                &#34;ExpirationTimestamp&#34;: &#34;2015-05-23T19:28:29.184Z&#34;,
-                &#34;AuthorizationFee&#34;: {
-                    &#34;Amount&#34;: &#34;0.00&#34;,
-                    &#34;CurrencyCode&#34;: &#34;USD&#34;
-                },
-                &#34;AuthorizationStatus&#34;: {
-                    &#34;ReasonCode&#34;: &#34;MaxCapturesProcessed&#34;,
-                    &#34;LastUpdateTimestamp&#34;: &#34;2015-04-23T19:28:29.184Z&#34;,
-                    &#34;State&#34;: &#34;Closed&#34;
-                },
-                &#34;AuthorizationAmount&#34;: {
-                    &#34;Amount&#34;: &#34;175.00&#34;,
-                    &#34;CurrencyCode&#34;: &#34;USD&#34;
-                }
-            }
-        }
+        "CapturedAmount": {
+          "CurrencyCode": "USD",
+          "Amount": "0"
+        },
+        "ExpirationTimestamp": "2015-07-17T17:40:24.238Z",
+        "IdList": null,
+        "AuthorizationStatus": {
+          "LastUpdateTimestamp": "2015-06-17T17:40:24.238Z",
+          "State": "Open"
+        },
+        "AuthorizationFee": {
+          "CurrencyCode": "USD",
+          "Amount": "0.00"
+        },
+        "CaptureNow": "false",
+        "CreationTimestamp": "2015-06-17T17:40:24.238Z",
+        "AmazonAuthorizationId": "S01-5425536-7210743-A035989",
+        "AuthorizationReferenceId": "Your Unique Reference Id"
+      }
+    },
+    "ResponseMetadata": {
+      "RequestId": "67b52b42-27b9-4aed-ac8c-e07f129c8d6b"
     }
+  }
 }</code></pre>
+                
+                <p>The <em>Capture</em> API call will capture the funds for the given order reference id.</p>
+                
+                <pre><code class="language-markup">{
+  "CaptureResponse": {
+    "xmlns": "http://mws.amazonservices.com/schema/OffAmazonPayments/2013-01-01",
+    "CaptureResult": {
+      "CaptureDetails": {
+        "CaptureReferenceId": "Your Unique Reference Id",
+        "CaptureFee": {
+          "CurrencyCode": "USD",
+          "Amount": "0.00"
+        },
+        "AmazonCaptureId": "S01-5425536-7210743-C035989",
+        "CreationTimestamp": "2015-06-17T17:44:00.234Z",
+        "SoftDescriptor": "AMZ*Test",
+        "IdList": null,
+        "CaptureStatus": {
+          "LastUpdateTimestamp": "2015-06-17T17:44:00.234Z",
+          "State": "Completed"
+        },
+        "SellerCaptureNote": null,
+        "RefundedAmount": {
+          "CurrencyCode": "USD",
+          "Amount": "0"
+        },
+        "CaptureAmount": {
+          "CurrencyCode": "USD",
+          "Amount": "175.00"
+        }
+      }
+    },
+    "ResponseMetadata": {
+      "RequestId": "e1fb68c1-8144-4b5f-a435-ca74926cb4bd"
+    }
+  }
+}/code></pre>
             </section>
 
         </div><!-- end wrap -->
