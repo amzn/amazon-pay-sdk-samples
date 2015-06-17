@@ -182,8 +182,8 @@ if response.success
         amazon_order_reference_id,
         authorization_reference_id,
         amount,
-        transaction_timeout: 0,
-        capture_now: true)
+        transaction_timeout: 0, # Default is 1440
+        capture_now: false)
 end
 
 respons_hash = Hash.from_xml(response.body)
@@ -287,7 +287,7 @@ return response_hash
       "RequestId": "e1fb68c1-8144-4b5f-a435-ca74926cb4bd"
     }
   }
-}/code></pre>
+}</code></pre>
             </section>
 
         </div><!-- end wrap -->
