@@ -100,8 +100,7 @@ if response.success:
         amazon_order_reference_id= 'AMAZON_ORDER_REFERENCE_ID',
         authorization_reference_id=rand(),
         authorization_amount=&#x27;175.00&#x27;,
-        transaction_timeout=0,
-        capture_now=False)
+        transaction_timeout=0)
         
 pretty_authorize = json.dumps(
     json.loads(
@@ -110,7 +109,7 @@ pretty_authorize = json.dumps(
         
 if response.success:
     response = client.capture(
-        amazon_authorization_id= 'Parse the Auhtorize response for this id',
+        amazon_authorization_id='Parse the Authorize response for this id',
         capture_reference_id=rand(),
         capture_amount=&#x27;175.00&#x27;)
 
@@ -144,21 +143,19 @@ if($client->success)
     $requestParameters['authorization_amount'] = '175.00';
     $requestParameters['authorization_reference_id'] = 'Your Unique Reference Id';
     $requestParameters['seller_authorization_note'] = 'Authorizing payment';
-    $requestParameters['transaction_timeout'] = 1440;
-    $requestParameters['capture_now'] = false;
+    $requestParameters['transaction_timeout'] = 0;
 
     $response = $client->authorize($requestParameters);
     $responsearray['authorize'] = json_decode($response->toJson());
 }
 
-// If the Authorize API call was a success make the Capture API call
+// If the Authorize API call was a success, make the Capture API call when you are ready to capture for the order (for example when the order has been dispatched)
 if($client->success)
 {
     $requestParameters['amazon_authorization_id'] = 'Parse the Authorize Response for this id';
     $requestParameters['capture_amount'] = '175.00';
     $requestParameters['currency_code'] = 'USD';
     $requestParameters['capture_reference_id'] = 'Your Unique Reference Id';
-    $requestParameters['seller_capture_note'] = 'Capture Test';
 
     $response = $client->capture($requestParameters);
     $responsearray['capture'] = json_decode($response->toJson());
@@ -176,7 +173,7 @@ response = client.confirm_order_reference(
 respons_hash = Hash.from_xml(response.body)
 return response_hash
 
-authorization_reference_id = "Your Unique Reference Id"
+authorization_reference_id = 'Your Unique Reference Id'
 amount = '175.00'
 
 if response.success
@@ -184,15 +181,14 @@ if response.success
         amazon_order_reference_id,
         authorization_reference_id,
         amount,
-        transaction_timeout: 0, # Default is 1440
-        capture_now: false)
+        transaction_timeout: 0)
 end
 
 respons_hash = Hash.from_xml(response.body)
 return response_hash
 
 amazon_authorization_id = response.get_element('AuthorizeResponse/AuthorizeResult/AuthorizationDetails','AmazonAuthorizationId')
-capture_reference_id = "Your Unique Reference Id"
+capture_reference_id = 'Your Unique Reference Id'
 amount = '175.00'
 
 if response.success
