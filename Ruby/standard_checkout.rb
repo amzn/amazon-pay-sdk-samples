@@ -1,7 +1,8 @@
 require 'pay_with_amazon'
 
 # Your Login and Pay with Amazon keys are
-# available in your Seller Central account
+# available in your Seller Central account.
+# Be sure to store your keys in a secure location. 
 merchant_id = 'YOUR_MERCHANT_ID'
 access_key = 'YOUR_ACCESS_KEY'
 secret_key = 'YOUR_SECRET_KEY'
