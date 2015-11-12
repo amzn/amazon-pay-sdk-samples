@@ -1,0 +1,11 @@
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\bin\SampleCartDemo.dll.config
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\bin\SampleCartDemo.dll
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\bin\SampleCartDemo.pdb
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\bin\Newtonsoft.Json.dll
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\bin\PayWithAmazon.dll
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\bin\Newtonsoft.Json.xml
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\bin\PayWithAmazon.pdb
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\bin\PayWithAmazon.xml
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\obj\Debug\SampleCartDemo.dll
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\obj\Debug\SampleCartDemo.pdb
+C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\obj\Debug\SampleCartDemo.csprojResolveAssemblyReference.cache
