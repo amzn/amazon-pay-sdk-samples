@@ -63,12 +63,7 @@
 
     </head>
     <body>
-        <input type="hidden" id="mws_access_key" value="">
-        <input type="hidden" id="mws_secret_key" value="">
-        <input type="hidden" id="merchant_id" value="">
-        <input type="hidden" id="client_id" value="">
         <div class="container">
-
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
                     <div class="navbar-header">
