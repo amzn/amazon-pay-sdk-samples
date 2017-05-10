@@ -107,7 +107,7 @@
 
         <script>
             window.onAmazonLoginReady = function() {
-                amazon.Login.setClientId('amzn1.application-oa2-client.85a1943ade6145878067573f5f45a53d');
+                amazon.Login.setClientId('ENTER_YOUR_CLIENT_ID');
             };
 
             document.getElementById("consent_token").value = decodeURI(window.location.search.match(new RegExp('(?:[\?\&]access_token=)([^&]+)'))[1]);
@@ -125,7 +125,7 @@
 
 
             new OffAmazonPayments.Widgets.AddressBook({
-                sellerId: "A1WTD9YOAS1TT0",
+                sellerId: "ENTER_YOUR_MERCHANT_ID",
                 agreementType: 'BillingAgreement',
                 onReady: function (billingAgreement) {
                     billingAgreementId = billingAgreement.getAmazonBillingAgreementId();
@@ -136,7 +136,7 @@
                     // render the consent and payment method widgets once the
                     // address book has loaded
                     new OffAmazonPayments.Widgets.Consent({
-                        sellerId: "A1WTD9YOAS1TT0",
+                        sellerId: "ENTER_YOUR_MERCHANT_ID",
                         // amazonBillingAgreementId obtained from the Amazon Address Book widget.
                         amazonBillingAgreementId: billingAgreementId,
                         design: {
@@ -171,7 +171,7 @@
                     }).bind("consentWidgetDiv");
 
                     new OffAmazonPayments.Widgets.Wallet({
-                        sellerId: "A1WTD9YOAS1TT0",
+                        sellerId: "ENTER_YOUR_MERCHANT_ID",
                         amazonBillingAgreementId: billingAgreementId,
                         onPaymentSelect: function (orderReference) {
                         },

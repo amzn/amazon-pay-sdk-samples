@@ -104,9 +104,9 @@ String billingAgreementId = request.getParameter("billing_agreement_id");
 String amount = "1.29";
 
 Config configkey = new PayConfig()
-      .withSellerId("A1WTD9YOAS1TT0")
-      .withAccessKey("AKIAJDKORTDNIDV7PPQA")
-      .withSecretKey("hg3rnLyGr8HBeLgger740oDeSL+2ftws62qE00GO")
+      .withSellerId("ENTER_YOUR_MERCHANT_ID")
+      .withAccessKey("ENTER_YOUR_ACCESS_KEY")
+      .withSecretKey("ENTER_YOUR_SECRET_KEY")
       .withSandboxMode(true)
       .withRegion(Region.US)
       .withCurrencyCode(CurrencyCode.USD);

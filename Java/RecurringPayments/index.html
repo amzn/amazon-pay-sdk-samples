@@ -109,22 +109,19 @@ Password:      test123</pre>
 
         <script type="text/javascript">
             window.onAmazonLoginReady = function() {
-                amazon.Login.setClientId('amzn1.application-oa2-client.85a1943ade6145878067573f5f45a53d');
+                amazon.Login.setClientId('ENTER_YOUR_CLIENT_ID');
             };
             window.onAmazonPaymentsReady = function() {
                 showButton();
             };
             function showButton() {
                 var authRequest;
-                OffAmazonPayments.Button("AmazonPayButton", "A1WTD9YOAS1TT0", {
+                OffAmazonPayments.Button("AmazonPayButton", "ENTER_YOUR_MERCHANT_ID", {
                     type: "PwA",
                     color: "Gold",
                     size: "medium",
                     authorization: function() {
-                        //loginOptions = { scope: "profile payments:widget payments:shipping_address", popup: true };
-                        //loginOptions = { scope: "profile payments:widget payments:shipping_address payments:initiate", popup: true };
-                        loginOptions = { scope: "profile payments:widget payments:shipping_address payments:initiate payments:instrument_descriptor", popup: true };
-                        //loginOptions = { scope: "profile payments:widget payments:shipping_address", popup: true };
+                        loginOptions = { scope: "profile payments:widget payments:shipping_address", popup: true };
                         authRequest = amazon.Login.authorize (loginOptions, "Widgets.jsp");
                     },
                     onError: function(error) {

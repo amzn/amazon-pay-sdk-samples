@@ -99,7 +99,7 @@
 
         <script>
             window.onAmazonLoginReady = function() {
-                amazon.Login.setClientId('amzn1.application-oa2-client.85a1943ade6145878067573f5f45a53d');
+                amazon.Login.setClientId('ENTER_YOUR_CLIENT_ID');
             };
 
             document.getElementById("consent_token").value = decodeURI(window.location.search.match(new RegExp('(?:[\?\&]access_token=)([^&]+)'))[1]);
@@ -112,7 +112,7 @@
 
         <script>
             new OffAmazonPayments.Widgets.AddressBook({
-                sellerId: 'A1WTD9YOAS1TT0',
+                sellerId: 'ENTER_YOUR_MERCHANT_ID',
                 onOrderReferenceCreate: function(orderReference) {
                     console.log('addressBookWidget: ' + orderReference.getAmazonOrderReferenceId());
                     document.getElementById("oro_id").value = orderReference.getAmazonOrderReferenceId();
@@ -129,11 +129,11 @@
                 },
                 onError: function(error) {
                     console.log('addressBookWidget: ' + error.getErrorMessage());
-                }
+                
             }).bind("addressBookWidgetDiv");
 
             new OffAmazonPayments.Widgets.Wallet({
-                sellerId: 'A1WTD9YOAS1TT0',
+                sellerId: 'ENTER_YOUR_MERCHANT_ID',
                 onPaymentSelect: function(orderReference) {
                     console.log('on payment select!');
                 },
