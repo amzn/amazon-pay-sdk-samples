@@ -35,15 +35,18 @@ def set():
 
 @app.route('/confirm', methods=['POST'])
 def confirm():
-    from pay_with_amazon.client import PayWithAmazonClient
+    from amazon_pay.client import AmazonPayClient
 
-    client = PayWithAmazonClient(
+    client = AmazonPayClient(
         mws_access_key=session['mws_access_key'],
         mws_secret_key=session['mws_secret_key'],
         merchant_id=session['merchant_id'],
         sandbox=True,
         region='na',
-        currency_code='USD')
+        currency_code='USD',
+        log_enabled=True,
+        log_file_name="log.txt",
+        log_level="DEBUG")
 
     response = client.confirm_billing_agreement(
         amazon_billing_agreement_id=session['billing_agreement_id'])
@@ -57,15 +60,18 @@ def confirm():
 
 @app.route('/authorize', methods=['POST'])
 def authorize():
-    from pay_with_amazon.client import PayWithAmazonClient
+    from amazon_pay.client import AmazonPayClient
 
-    client = PayWithAmazonClient(
+    client = AmazonPayClient(
         mws_access_key=session['mws_access_key'],
         mws_secret_key=session['mws_secret_key'],
         merchant_id=session['merchant_id'],
         sandbox=True,
         region='na',
-        currency_code='USD')
+        currency_code='USD',
+        log_enabled=True,
+        log_file_name="log.txt",
+        log_level="DEBUG")
 
     response = client.authorize_on_billing_agreement(
         amazon_billing_agreement_id=session['billing_agreement_id'],
@@ -88,22 +94,25 @@ def authorize():
 
 @app.route('/get_details', methods=['POST'])
 def get_details():
-    from pay_with_amazon.client import PayWithAmazonClient
+    from amazon_pay.client import AmazonPayClient
 
-    client = PayWithAmazonClient(
+    client = AmazonPayClient(
         mws_access_key=session['mws_access_key'],
         mws_secret_key=session['mws_secret_key'],
         merchant_id=session['merchant_id'],
         sandbox=True,
         region='na',
-        currency_code='USD')
+        currency_code='USD',
+        log_enabled=True,
+        log_file_name="log.txt",
+        log_level="DEBUG")
 
     billing_agreement_id = request.form['billingAgreementId']
     session['billing_agreement_id'] = billing_agreement_id
 
     response = client.set_billing_agreement_details(
         amazon_billing_agreement_id=billing_agreement_id,
-        store_name='Pay with Amazon Python SDK')
+        store_name='Amazon Pay Python SDK')
 
     if response.success:
         response = client.get_billing_agreement_details(

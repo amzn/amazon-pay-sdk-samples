@@ -4,7 +4,7 @@
     {{ super() }}
     <script type='text/javascript'>
         window.onAmazonLoginReady = function () {
-            amazon.Login.setClientId('{{ session['client_id'] }}');
+            amazon.Login.setClientId("{{ session['client_id'] }}");
             amazon.Login.setUseCookie(true);
         };
     </script>
@@ -39,7 +39,7 @@
                 'min': 0,
                 'max': 10,
                 'val': 0,
-                'readOnly': true
+                'readOnly': false
             });
         });
         tick();
@@ -56,7 +56,7 @@
                     autoHideDelay: 3000
                 });
                 $.post("/authorize", {
-                    billingAgreementId: ''
+                    amazon_billing_agreement_id: ''
                 }).done(function (data) {
                     $("#authorize-response").html('<pre><code>'+data+'</pre></code>');
                     timeout = setTimeout('tick()', 1000);
@@ -81,9 +81,9 @@
 
 {% block api %}
 <p>Since the subscription was confirmed we can now confirm the billing agreement.</p>
-<pre><code class="language-python">from pay_with_amazon.client import PayWithAmazonClient
+<pre><code class="language-python">from amazon_pay.client import AmazonPayClient
 
-client = PayWithAmazonClient(
+client = AmazonPayClient(
     mws_access_key=session['mws_access_key'],
     mws_secret_key=session['mws_secret_key'],
     merchant_id=session['merchant_id'],
@@ -108,9 +108,9 @@ unsuccessful you would see an error response.</p>
 <pre><code>{{ confirm_response }} </code></pre>
 
 <p>This is how to make an authorization on the billing agreement.</p>
-<pre><code class="language-python">from pay_with_amazon.client import PayWithAmazonClient
+<pre><code class="language-python">from amazon_pay.client import AmazonPayClient
 
-client = PayWithAmazonClient(
+client = AmazonPayClient(
     mws_access_key=session['mws_access_key'],
     mws_secret_key=session['mws_secret_key'],
     merchant_id=session['merchant_id'],

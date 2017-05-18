@@ -124,7 +124,7 @@
 &#x3C;div id=&#x22;consentWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
 </pre></code>
 
-<p>Add script to set the client Id just as you did for displaying the Pay with Amazon button.</p>
+<p>Add script to set the client Id just as you did for displaying the Amazon Pay button.</p>
 <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
     window.onAmazonLoginReady = function () {
         amazon.Login.setClientId(&#x27;{{ session['client_id'] }}&#x27;);
@@ -228,9 +228,9 @@ widget is loaded. This will ensure they get a valid billing agreement.</p>
 These API calls set the store name and return the billing agreement details.</p>
 <p>Refer to the <em>/get_details</em> endpoint in the 'recurring_payment.py' 
 file for more details.</p>
-<pre><code class="language-python">from pay_with_amazon.client import PayWithAmazonClient
+<pre><code class="language-python">from amazon_pay.client import AmazonPayClient
 
-client = PayWithAmazonClient(
+client = AmazonPayClient(
     mws_access_key=session['mws_access_key'],
     mws_secret_key=session['mws_secret_key'],
     merchant_id=session['merchant_id'],
@@ -243,7 +243,7 @@ session['billing_agreement_id'] = billing_agreement_id
 
 response = client.set_billing_agreement_details(
     amazon_billing_agreement_id=billing_agreement_id,
-    store_name='Pay with Amazon Python SDK')
+    store_name='Amazon Pay Python SDK')
 
 if response.success:
     response = client.get_billing_agreement_details(

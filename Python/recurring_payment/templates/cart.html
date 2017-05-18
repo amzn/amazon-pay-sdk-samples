@@ -26,7 +26,7 @@
                 <tr>
                     <td><div class="btn btn-default"><img class="media-object" src="{{ url_for('static', filename='img/python-icon.png') }}" alt="Python SDK"></div></td>
                     <td>
-                        <div><strong>Deluxe Pay with Amazon Python SDK Support Subscription</strong></div>
+                        <div><strong>Deluxe Amazon Pay Python SDK Support Subscription</strong></div>
                         <div><em>This will subscribe you to our Python SDK developer channel. You will receive new updates and features as they are released along with unlimited developer support.</em></div>
                       
                     </td>
@@ -42,7 +42,8 @@
     <div class="text-center" style="margin-top:40px;" id="AmazonPayButton"></div>
     <script type='text/javascript'>
         window.onAmazonLoginReady = function () {
-            amazon.Login.setClientId('{{ session['client_id'] }}');
+            amazon.Login.setClientId("{{ session['client_id'] }}");
+            //amazon.Login.setClientId('{{ session['client_id'] }}');
             amazon.Login.setUseCookie(true);
         };
     </script>
