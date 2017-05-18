@@ -3,6 +3,7 @@ import html
 import json
 import time
 import random
+import logging
 # Import 'Flask' for creating a flask application,
 # 'session' to store and retrieve session variables in every view
 # 'render_template' to render a HTML template with the given context variables
@@ -11,7 +12,7 @@ import random
 # 'request' to access the request object which contains the request data
 # 'flash' to display messages in the template
 from flask import Flask, session, render_template, url_for, redirect, request, flash
-from pay_with_amazon.client import PayWithAmazonClient
+from amazon_pay.client import AmazonPayClient
 
 app = Flask(__name__)
 app.secret_key = 'my_super_secret_key!'
@@ -28,6 +29,7 @@ def cart():
     session['mws_access_key'] = request.form['mws-access-key']
     session['mws_secret_key'] = request.form['mws-secret-key']
     session['client_id'] = request.form['client-id']
+    session['order_reference_id'] = 'S01-9969307-1083016'
     return render_template('cart.html')
 
 
@@ -39,19 +41,23 @@ def set():
 
 @app.route('/confirm', methods=['POST'])
 def confirm():
-    from pay_with_amazon.client import PayWithAmazonClient
+    from amazon_pay.client import AmazonPayClient
 
     pretty_confirm = None
     pretty_authorize = None
 
-    client = PayWithAmazonClient(
+    client = AmazonPayClient(
         mws_access_key=session['mws_access_key'],
         mws_secret_key=session['mws_secret_key'],
         merchant_id=session['merchant_id'],
         sandbox=True,
         region='na',
-        currency_code='USD')
-
+        currency_code='USD',
+        log_enabled=True,
+        log_file_name="log.txt",
+        log_level="DEBUG")
+         
+    print(session)
     response = client.confirm_order_reference(
         amazon_order_reference_id=session['order_reference_id'])
 
@@ -66,7 +72,7 @@ def confirm():
             authorization_reference_id=rand(),
             authorization_amount='19.95',
             transaction_timeout=0,
-            capture_now=True)
+            capture_now=False)
 
     pretty_authorize = json.dumps(
         json.loads(
@@ -79,18 +85,23 @@ def confirm():
 
 @app.route('/get_details', methods=['POST'])
 def get_details():
-    from pay_with_amazon.client import PayWithAmazonClient
+    from amazon_pay.client import AmazonPayClient
 
-    client = PayWithAmazonClient(
+    client = AmazonPayClient(
         mws_access_key=session['mws_access_key'],
         mws_secret_key=session['mws_secret_key'],
         merchant_id=session['merchant_id'],
         sandbox=True,
         region='na',
-        currency_code='USD')
+        currency_code='USD',
+        log_enabled=True,
+        log_file_name="log.txt",
+        log_level="DEBUG")
 
     order_reference_id = request.form['orderReferenceId']
     session['order_reference_id'] = order_reference_id
+    
+    print(session['order_reference_id'])
 
     response = client.set_order_reference_details(
         amazon_order_reference_id=order_reference_id,

@@ -13,19 +13,19 @@
 
 {% block content %}
     <h2>Select Shipping and Payment Method</h2>
-    <p style="margin-top:20px;">Select your billing address and payment method 
+    <p style="margin-top:20px;">Select your billing address and payment method
     from the widgets below.</p>
-    <p>Notice in the URL above there are several parameters available. 
-    The 'access_token' should be saved in order to obtain address line one and 
+    <p>Notice in the URL above there are several parameters available.
+    The 'access_token' should be saved in order to obtain address line one and
     two of the shipping address associated with the payment method.</p>
     <p><pre><code>{{ session['access_token'] }}</code></pre></p>
-    <p>This is known as the address consent token. It is passed to the <em>GetOrderReferenceDetails</em> API 
-    call to retrieve information about the order reference Id that is generated 
+    <p>This is known as the address consent token. It is passed to the <em>GetOrderReferenceDetails</em> API
+    call to retrieve information about the order reference Id that is generated
     by the widgets.</p>
-    <p>If you see a error message in the widgets you will need to 
-    start over. This usually indicates that your session has expired. If the problem 
+    <p>If you see a error message in the widgets you will need to
+    start over. This usually indicates that your session has expired. If the problem
     persists please contact developer support.</p>
-    
+
     <div class="text-center" style="margin-top:40px;">
         <div id="addressBookWidgetDiv" style="width:400px; height:240px; display:inline-block;"></div>
         <div id="walletWidgetDiv" style="width:400px; height:240px; display:inline-block;"></div>
@@ -36,16 +36,20 @@
         </form>
     </div>
     <script type="text/javascript">
+        var order ='';
         new OffAmazonPayments.Widgets.AddressBook({
             sellerId: '{{ session['merchant_id'] }}',
             onOrderReferenceCreate: function (orderReference) {
-                // make a call to the back-end that will set order reference details 
-                // and get order reference details. This will set the order total 
-                // to 19.95 and return order reference details. 
+                // make a call to the back-end that will set order reference details
+                // and get order reference details. This will set the order total
+                // to 19.95 and return order reference details.
+                order = orderReference.getAmazonOrderReferenceId();
+                console.log(order);
                 $.post("/get_details", {
-                    orderReferenceId: orderReference.getAmazonOrderReferenceId()
+                    orderReferenceId: order
                 }).done(function (data) {
                     $("#get_details_response").html(data);
+                    console.log(orderReferenceId);
                 });
             },
             onAddressSelect: function (orderReference) {
@@ -57,9 +61,9 @@
                 // your error handling code
             }
         }).bind("addressBookWidgetDiv");
-    
+
         new OffAmazonPayments.Widgets.Wallet({
-            sellerId: '{{ session['merchant_id'] }}',            
+            sellerId: '{{ session['merchant_id'] }}',
             onPaymentSelect: function (orderReference) {
             },
             design: {
@@ -78,7 +82,7 @@
 &#x3C;div id=&#x22;walletWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
 </pre></code>
 
-<p>Add script to set the client Id just as you did for displaying the Pay with Amazon button.</p>
+<p>Add script to set the client Id just as you did for displaying the Amazon Pay button.</p>
 <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
     window.onAmazonLoginReady = function () {
         amazon.Login.setClientId(&#x27;{{ session['client_id'] }}&#x27;);
@@ -91,21 +95,21 @@
 <pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;
 </pre></code>
 
-<p>Add the widgets code. You can use the <em>onOrderReferenceCreate</em> method to 
-obtain information about the order reference Id. In the example, we are using jQuery 
+<p>Add the widgets code. You can use the <em>onOrderReferenceCreate</em> method to
+obtain information about the order reference Id. In the example, we are using jQuery
 to make a AJAX POST.</p>
 <pre><code class="language-javascript">&#x3C;script type=&#x22;text/javascript&#x22;&#x3E;
     new OffAmazonPayments.Widgets.AddressBook({
         sellerId: &#x27;{{ session['merchant_id'] }}&#x27;,
         onOrderReferenceCreate: function (orderReference) {
-            // make a call to the back-end that will set order reference details 
-            // and get order reference details. This will set the order total 
-            // to 19.95 and return order reference details. 
+            // make a call to the back-end that will set order reference details
+            // and get order reference details. This will set the order total
+            // to 19.95 and return order reference details.
             $.post("/get_details", {
                 orderReferenceId: orderReference.getAmazonOrderReferenceId()
             }).done(function (data) {
                 $("#get_details_response").html(data);
-            });
+            }),
         },
         onAddressSelect: function () {
             // do stuff here like recalculate tax and/or shipping
@@ -119,7 +123,7 @@ to make a AJAX POST.</p>
     }).bind(&#x22;addressBookWidgetDiv&#x22;);
 
     new OffAmazonPayments.Widgets.Wallet({
-        sellerId: &#x27;{{ session['merchant_id'] }}&#x27;,            
+        sellerId: &#x27;{{ session['merchant_id'] }}&#x27;,
         onPaymentSelect: function () {
         },
         design: {
@@ -132,9 +136,9 @@ to make a AJAX POST.</p>
 &#x3C;/script&#x3E;
 </code></pre>
 
-<p>These are the back-end API calls to <em>SetOrderReferenceDetails</em> and <em>GetOrderReferenceDetails</em>.  
+<p>These are the back-end API calls to <em>SetOrderReferenceDetails</em> and <em>GetOrderReferenceDetails</em>.
 These API calls set the order total to 19.95 and gets the order reference details.</p>
-<p>Refer to the <em>/get_details</em> endpoint in the 'lpa-python-sdk-sample.py' 
+<p>Refer to the <em>/get_details</em> endpoint in the 'lpa-python-sdk-sample.py'
 file for more details.</p>
 <pre><code class="language-python">from pay_with_amazon.client import PayWithAmazonClient
 
@@ -164,6 +168,6 @@ pretty = json.dumps(
 return pretty
 </code></pre>
 
-<p>This is the live response from the previous API call.</p> 
+<p>This is the live response from the previous API call.</p>
 <pre id="get_details_response"><div class="text-center"><img src="{{ url_for('static', filename='img/ajax-loader.gif') }}" /></div></pre>
 {% endblock api %}

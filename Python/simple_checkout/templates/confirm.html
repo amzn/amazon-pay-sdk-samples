@@ -4,7 +4,7 @@
     {{ super() }}
     <script type='text/javascript'>
         window.onAmazonLoginReady = function () {
-            amazon.Login.setClientId('{{ session['client_id'] }}');
+            amazon.Login.setClientId("{{ session['client_id'] }}");
             amazon.Login.setUseCookie(true);
         };
     </script>
@@ -13,7 +13,7 @@
 
 {% block content %}
     <h2>Confirm</h2>
-    <p>Congratulations! You are now a proud owner of the official Pay with Amazon 
+    <p>Congratulations! You are now a proud owner of the official Amazon Pay 
     Python Software Development Kit!</p>
     <p>At this point we will make the <em>Confirm</em> API call to confirm the order 
     reference and a subsequesnt <em>Authorize</em> and <em>Capture</em> API call. 
@@ -24,12 +24,12 @@
 
 {% block api %}
 <p>Here you can see how we made the <em>Confirm</em> and <em>Authorize</em> calls.</p>
-<pre><code class="language-python">from pay_with_amazon.client import PayWithAmazonClient
+<pre><code class="language-python">from amazon_pay.client import AmazonPayClient
 
 pretty_confirm = None
 pretty_authorize = None
 
-client = PayWithAmazonClient(
+client = AmazonPayClient(
     mws_access_key=session['mws_access_key'],
     mws_secret_key=session['mws_secret_key'],
     merchant_id=session['merchant_id'],
