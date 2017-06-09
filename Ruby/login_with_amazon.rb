@@ -1,13 +1,13 @@
-require 'pay_with_amazon'
+require 'amazon_pay'
 
 # Your client id is located in your Seller
 # Central account. Be sure to store your keys
 # in a secure location. 
 client_id = 'Your Client Id'
 
-login = PayWithAmazon::Login.new(
+login = AmazonPay::Login.new(
   client_id,
-  region: :na, # Default: :na
+  region: :na,  # Default: :na
   sandbox: true # Default: false
 )
 
