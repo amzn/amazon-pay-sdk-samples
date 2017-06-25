@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using PayWithAmazon;
-using PayWithAmazon.StandardPaymentRequests;
-using PayWithAmazon.CommonRequests;
-using PayWithAmazon.Responses;
+using AmazonPay;
+using AmazonPay.StandardPaymentRequests;
+using AmazonPay.CommonRequests;
+using AmazonPay.Responses;
 using Newtonsoft.Json;
 using System.Configuration;
 using System.Web.Services;
@@ -17,7 +17,7 @@ namespace SampleCartDemo.OneTimePayments
     public partial class SetPaymentDetails : System.Web.UI.Page
     {
         string access_token = "";
-        private static PayWithAmazon.CommonRequests.Configuration clientConfig = null;
+        private static AmazonPay.CommonRequests.Configuration clientConfig = null;
         private static Client client = null;
         private static Dictionary<string, string> apiResponse = new Dictionary<string, string>();
 
@@ -25,7 +25,7 @@ namespace SampleCartDemo.OneTimePayments
         {
             access_token = Request.QueryString["access_token"];
             access_token_text.InnerHtml = access_token;
-            clientConfig = new PayWithAmazon.CommonRequests.Configuration();
+            clientConfig = new AmazonPay.CommonRequests.Configuration();
 
             clientConfig.WithAccessKey(ConfigurationManager.AppSettings["access_key"])
                 .WithSecretKey(ConfigurationManager.AppSettings["secret_key"])

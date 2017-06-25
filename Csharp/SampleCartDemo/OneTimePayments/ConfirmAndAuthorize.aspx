@@ -73,7 +73,7 @@
                 <nav class="navbar navbar-default">
                     <div class="container-fluid">
                         <div class="navbar-header">
-                            <a class="navbar-brand start_over" href="index.aspx">Pay with Amazon CSHARP SDK Simple Checkout</a>
+                            <a class="navbar-brand start_over" href="index.aspx">Amazon Pay C# SDK OneTime Checkout</a>
                         </div>
                         <div id="navbar" class="navbar-collapse collapse">
                             <ul class="nav navbar-nav navbar-right">
@@ -87,8 +87,8 @@
 
                         <h2>Confirm</h2>
                         <p>
-                            Congratulations! You are now a proud owner of the official Pay with Amazon 
-    CSHARP Software Development Kit!
+                            Congratulations! You are now a proud owner of the official Amazon Pay
+    C# Software Development Kit!
                         </p>
                         <p>
                             At this point we will make the <em>Confirm</em> API call to confirm the order 

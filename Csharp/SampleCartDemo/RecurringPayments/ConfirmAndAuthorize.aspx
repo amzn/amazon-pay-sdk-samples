@@ -75,7 +75,7 @@
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand start_over" href="index.aspx">Pay with Amazon CSHARP SDK Simple Recurring Payment</a>
+                        <a class="navbar-brand start_over" href="index.aspx">Amazon Pay C# SDK Recurring Payment</a>
                     </div>
                     <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbar-nav navbar-right">

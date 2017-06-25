@@ -1,7 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
-using PayWithAmazon;
-using PayWithAmazon.RecurringPaymentRequests;
-using PayWithAmazon.Responses;
+using AmazonPay;
+using AmazonPay.RecurringPaymentRequests;
+using AmazonPay.Responses;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -15,7 +15,7 @@ namespace SampleCartDemo.RecurringPayments
     public partial class SetPaymentDetails : System.Web.UI.Page
     {
         string access_token = "";
-        private static PayWithAmazon.CommonRequests.Configuration clientConfig = null;
+        private static AmazonPay.CommonRequests.Configuration clientConfig = null;
         private static Client client = null;
         private static Dictionary<string, string> apiResponse = new Dictionary<string, string>();
 
@@ -23,7 +23,7 @@ namespace SampleCartDemo.RecurringPayments
         {
             access_token = Request.QueryString["access_token"];
             access_token_text.InnerHtml = access_token;
-            clientConfig = new PayWithAmazon.CommonRequests.Configuration();
+            clientConfig = new AmazonPay.CommonRequests.Configuration();
 
             clientConfig.WithAccessKey(ConfigurationManager.AppSettings["access_key"])
                 .WithSecretKey(ConfigurationManager.AppSettings["secret_key"])

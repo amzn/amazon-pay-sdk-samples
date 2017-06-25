@@ -9,3 +9,14 @@ c:\users\shrakuma\documents\visual studio 2013\Projects\SampleCartDemo\SampleCar
 c:\users\shrakuma\documents\visual studio 2013\Projects\SampleCartDemo\SampleCartDemo\obj\Release\SampleCartDemo.dll
 c:\users\shrakuma\documents\visual studio 2013\Projects\SampleCartDemo\SampleCartDemo\obj\Release\SampleCartDemo.pdb
 C:\Users\shrakuma\Documents\Visual Studio 2013\Projects\SampleCartDemo\SampleCartDemo\obj\Release\SampleCartDemo.csprojResolveAssemblyReference.cache
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\bin\SampleCartDemo.dll.config
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\bin\SampleCartDemo.dll
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\bin\SampleCartDemo.pdb
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\bin\Newtonsoft.Json.dll
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\obj\Release\SampleCartDemo.dll
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\obj\Release\SampleCartDemo.pdb
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\bin\Newtonsoft.Json.xml
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\bin\AmazonPay.dll
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\bin\Common.Logging.dll
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\bin\AmazonPay.pdb
+H:\login-and-pay-with-amazon-sdk-samples\Csharp\SampleCartDemo\bin\AmazonPay.xml

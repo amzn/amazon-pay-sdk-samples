@@ -4,7 +4,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Login And Pay With Amazon CSHARP sample demo</title>
+    <title>Amazon Pay C# sample demo</title>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -68,16 +68,12 @@
 <body>
     <form id="samplecartdemo" runat="server">
         <div>
-            <input type="hidden" id="mws_access_key" value="" />
-            <input type="hidden" id="mws_secret_key" value="" />
-            <input type="hidden" id="merchant_id" value="" />
-            <input type="hidden" id="client_id" value="" />
             <div class="container">
 
                 <nav class="navbar navbar-default">
                     <div class="container-fluid">
                         <div class="navbar-header">
-                            <a class="navbar-brand start_over" href="#">Pay with Amazon C# SDK Simple Checkout</a>
+                            <a class="navbar-brand start_over" href="#">Amazon Pay C# SDK OneTime Checkout</a>
                         </div>
                         <div id="navbar" class="navbar-collapse collapse">
                             <ul class="nav navbar-nav navbar-right">
@@ -116,10 +112,10 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div><strong>Deluxe Pay with Amazon C# Software Development Kit</strong></div>
+                                                    <div><strong>Deluxe Amazon Pay C# Software Development Kit</strong></div>
                                                     <div>
-                                                        <em>This SDK will allow you to integrate with Amazon Payments seamlessly and efforlessly. 
-                        For more information visit the <a target='_new' href='https://github.com/amzn/login-and-pay-with-amazon-sdk-csharp'>Login and Pay with Amazon GitHub site</a>.</em>
+                                                        <em>This SDK will allow you to integrate with Amazon Pay seamlessly and efforlessly. 
+                        For more information visit the <a target='_new' href='https://github.com/amzn/login-and-pay-with-amazon-sdk-csharp'>Amazon Pay GitHub site</a>.</em>
                                                     </div>
 
                                                 </td>

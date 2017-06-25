@@ -82,7 +82,7 @@
             <nav class="navbar navbar-default">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand start_over" href="index.aspx">Pay with Amazon C# SDK Simple Checkout</a>
+                        <a class="navbar-brand start_over" href="index.aspx">Amazon Pay C# SDK OneTime Checkout</a>
                     </div>
                     <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbakr-nav navbar-right">

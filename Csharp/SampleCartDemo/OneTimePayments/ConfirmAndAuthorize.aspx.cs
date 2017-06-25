@@ -4,10 +4,10 @@ using System.Web;
 using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using PayWithAmazon;
-using PayWithAmazon.CommonRequests;
-using PayWithAmazon.StandardPaymentRequests;
-using PayWithAmazon.Responses;
+using AmazonPay;
+using AmazonPay.CommonRequests;
+using AmazonPay.StandardPaymentRequests;
+using AmazonPay.Responses;
 using Newtonsoft.Json.Linq;
 
 namespace SampleCartDemo.OneTimePayments

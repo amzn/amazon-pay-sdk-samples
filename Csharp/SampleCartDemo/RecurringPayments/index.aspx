@@ -73,7 +73,7 @@
                 <nav class="navbar navbar-default">
                     <div class="container-fluid">
                         <div class="navbar-header">
-                            <a class="navbar-brand start_over" href="#">Pay with Amazon CSHARP SDK Simple Checkout</a>
+                            <a class="navbar-brand start_over" href="#">Amazon Pay C# SDK OneTime Checkout</a>
                         </div>
                         <div id="navbar" class="navbar-collapse collapse">
                             <ul class="nav navbar-nav navbar-right">
@@ -112,10 +112,10 @@
                                                     </div>
                                                 </td>
                                                 <td>
-                                                    <div><strong>Deluxe Pay with Amazon CSHARP Software Development Kit</strong></div>
+                                                    <div><strong>Deluxe Amazon Pay C# Software Development Kit</strong></div>
                                                     <div>
-                                                        <em>This SDK will allow you to integrate with Amazon Payments seamlessly and efforlessly. 
-                        For more information visit the <a target='_new' href='https://github.com/amzn/login-and-pay-with-amazon-sdk-csharp'>Login and Pay with Amazon GitHub site</a>.</em>
+                                                        <em>This SDK will allow you to integrate with Amazon Pay seamlessly and efforlessly. 
+                        For more information visit the <a target='_new' href='https://github.com/amzn/login-and-pay-with-amazon-sdk-csharp'>Amazon Pay GitHub site</a>.</em>
                                                     </div>
 
                                                 </td>

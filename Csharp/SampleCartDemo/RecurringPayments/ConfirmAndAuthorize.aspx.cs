@@ -1,8 +1,8 @@
 ﻿using Newtonsoft.Json.Linq;
-using PayWithAmazon;
-using PayWithAmazon.RecurringPaymentRequests;
-using PayWithAmazon.Responses;
-using PayWithAmazon.StandardPaymentRequests;
+using AmazonPay;
+using AmazonPay.RecurringPaymentRequests;
+using AmazonPay.Responses;
+using AmazonPay.StandardPaymentRequests;
 using System;
 using System.Collections.Generic;
 using System.Web;
