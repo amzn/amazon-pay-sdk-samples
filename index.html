@@ -41,7 +41,7 @@
         <!-- HEADER -->
         <div id="header_wrap" class="outer">
             <header class="inner">
-                <a id="forkme_banner" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples">View on GitHub</a>
+                <a id="forkme_banner" href="https://github.com/amzn/amazon-pay-sdk-samples">View on GitHub</a>
 
                 <h1 id="project_title" style="margin-top:20px;">Amazon Pay SDK samples</h1>
 
@@ -53,13 +53,13 @@
             <section id="main_content" class="inner">
                 <div id="section-content">
                     <h2>Samples</h2>
-                    <div style="margin-bottom:15px"><a href="https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/login_and_pay/lpa-login.html" style="font-size:1.1em"><strong>Amazon Pay</strong></a>: This walk-through will demonstrate the Amazon Pay and Login with Amazon experience, with code samples.
+                    <div style="margin-bottom:15px"><a href="https://amzn.github.io/amazon-pay-sdk-samples/login_and_pay/lpa-login.html" style="font-size:1.1em"><strong>Amazon Pay</strong></a>: This walk-through will demonstrate the Amazon Pay and Login with Amazon experience, with code samples.
                     </div>
 
-                    <div style="margin-bottom:15px"><a href="https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/simple.html" style="font-size:1.1em"><strong>Simple checkout</strong></a>: This walk-through will demonstrate how to create your own checkout using the Amazon Pay APIs.
+                    <div style="margin-bottom:15px"><a href="https://amzn.github.io/amazon-pay-sdk-samples/simple.html" style="font-size:1.1em"><strong>Simple checkout</strong></a>: This walk-through will demonstrate how to create your own checkout using the Amazon Pay APIs.
                     </div>
 
-                    <div style="margin-bottom:15px"><a href="https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/recurring.html" style="font-size:1.1em"><strong>Recurring payments</strong></a>: This walk-through will demonstrate how to create your own subscriptions platform using the Login and Pay with Amazon APIs.
+                    <div style="margin-bottom:15px"><a href="https://amzn.github.io/amazon-pay-sdk-samples/recurring.html" style="font-size:1.1em"><strong>Recurring payments</strong></a>: This walk-through will demonstrate how to create your own subscriptions platform using the Login and Pay with Amazon APIs.
                     </div>
                     
                     <div class="alert alert-danger">UK Merchants, please contact <a target="blank" href="https://pay.amazon.co.uk/contact">Seller Support</a> to use recurring payments.</div>
@@ -86,7 +86,7 @@
                 height: 50,
                 authorization: function () {
                     loginOptions = {scope: "profile postal_code payments:widget payments:shipping_address", popup: true};
-                    authRequest = amazon.Login.authorize(loginOptions, "https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/set.html");
+                    authRequest = amazon.Login.authorize(loginOptions, "https://amzn.github.io/amazon-pay-sdk-samples/set.html");
                 },
                 onError: function (error) {
                     // something bad happened
