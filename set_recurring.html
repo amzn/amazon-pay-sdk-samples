@@ -3,7 +3,7 @@
     <head>
         <meta charset='utf-8'>
         <meta http-equiv="X-UA-Compatible" content="chrome=1">
-        <meta name="description" content="Login and Pay with Amazon SDK Samples : Login and Pay with Amazon SDK Sample Code">
+        <meta name="description" content="Amazon Pay SDK Samples : Amazon Pay SDK Sample Code">
 
         <script type="text/javascript">
             var host = "amzn.github.io";
@@ -48,13 +48,13 @@
                 $("#access_token").val(access_token);
                 $("#code_access_token").text(access_token);
                 $("#place-order").on("click", function () {
-                    window.location = "https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/confirm_recurring.html"
+                    window.location = "https://amzn.github.io/amazon-pay-sdk-samples/confirm_recurring.html"
                 });
             });
         </script>
 
 
-        <title>Login and Pay with Amazon SDK Samples</title>
+        <title>Amazon Pay SDK Samples</title>
     </head>
 
     <body>
@@ -67,10 +67,10 @@
         <!-- HEADER -->
         <div id="header_wrap" class="outer">
             <header class="inner">
-                <a id="forkme_banner" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples">View on GitHub</a>
+                <a id="forkme_banner" href="https://github.com/amzn/amazon-pay-sdk-samples">View on GitHub</a>
 
-                <h1 id="project_title" style="margin-top:20px;">Pay with Amazon SDK Samples</h1>
-                <h2 id="project_tagline">Pay with Amazon Recurring Payments</h2>
+                <h1 id="project_title" style="margin-top:20px;">Amazon Pay SDK Samples</h1>
+                <h2 id="project_tagline">Amazon Pay Recurring Payments</h2>
 
             </header>
         </div>
@@ -112,7 +112,7 @@
 &#x3C;div id=&#x22;walletWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
 &#x3C;div id=&#x22;consentWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;</code></pre>
 
-                        <p>Add script to set the <strong>CLIENT_ID</strong> just as you did for displaying the Pay with Amazon button.</p>
+                        <p>Add script to set the <strong>CLIENT_ID</strong> just as you did for displaying the Amazon Pay button.</p>
 <pre><code class="language-javascript">
 &#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
   window.onAmazonLoginReady = function () {
@@ -197,12 +197,12 @@
     <p>These are the backend API calls to <em>SetBillingAgreementDetails</em> and <em>GetBillingAgreementDetails</em>.
     These API calls set the store name and return the billing agreement details. The Amazon Billing Agreement Id will be created
     once the widgets load. (see the 'billingAgreementId' parameter in the javascript above)</p>
-    <p>The Pay with Amazon client will be initialized here and used throughout the rest of the sample.</p>
+    <p>The Amazon Pay client will be initialized here and used throughout the rest of the sample.</p>
     <div class="alert alert-danger" role="alert">The below is sample code. Your MWS Keys should be stored in a secure location.</div>
 
-<pre class="l-python"><code class="language-python">from pay_with_amazon.client import PayWithAmazonClient
+<pre class="l-python"><code class="language-python">from amazon_pay.client import AmazonPayClient
 
-client = PayWithAmazonClient(
+client = AmazonPayClient(
     mws_access_key=session['mws_access_key'],
     mws_secret_key=session['mws_secret_key'],
     merchant_id=session['merchant_id'],
@@ -215,7 +215,7 @@ session['billing_agreement_id'] = billing_agreement_id
 
 response = client.set_billing_agreement_details(
     amazon_billing_agreement_id=billing_agreement_id,
-    store_name='Pay with Amazon Python SDK')
+    store_name='Amazon Pay Python SDK')
 
 if response.success:
     response = client.get_billing_agreement_details(
@@ -231,11 +231,11 @@ return pretty</code></pre>
 
 
 <pre class="l-php"><code class="language-php">
-namespace PayWithAmazon;
+namespace AmazonPay;
 
 session_start();
 
-require_once '/PayWithAmazon/Client.php';
+require_once '/AmazonPay/Client.php';
 
 $config = array('merchant_id'   => 'MERCHANT_ID',
                 'access_key'    => 'ACCESS_KEY',
@@ -281,13 +281,13 @@ echo json_encode($json, JSON_PRETTY_PRINT);
 
 
 
-<pre class="l-ruby"><code class="language-ruby">require 'pay_with_amazon'
+<pre class="l-ruby"><code class="language-ruby">require 'amazon_pay'
 
 access_key = 'ACCESS_KEY'
 secret_key = 'SECRET_KEY'
 merchant_id = 'MERCHANT_ID'
 
-client = PayWithAmazon::Client.new(
+client = AmazonPay::Client.new(
     access_key,
     secret_key,
     merchant_id,
@@ -299,7 +299,7 @@ amazon_billing_agreement_id = 'AMAZON_BILLING_AGREEMENT_ID'
 
 response = client.set_billing_agreement_details(
     amazon_billing_agreement_id,
-    store_name: 'Pay with Amazon Ruby SDK')
+    store_name: 'Amazon Pay Ruby SDK')
 
 if response.success
     response = client.get_billing_agreement_details(
@@ -324,7 +324,7 @@ return response_hash
         "GetBillingAgreementDetailsResult": {
             "BillingAgreementDetails": {
                 "SellerBillingAgreementAttributes": {
-                    "StoreName": "Pay with Amazon Python SDK"
+                    "StoreName": "Amazon Pay Python SDK"
                 },
                 "BillingAgreementLimits": {
                     "AmountLimitPerTimePeriod": {
@@ -375,7 +375,7 @@ return response_hash
         <!-- FOOTER  -->
         <div id="footer_wrap" class="outer">
             <footer class="inner">
-                <p class="copyright">Login and Pay with Amazon SDK Samples maintained by <a href="https://github.com/amzn">amzn</a></p>
+                <p class="copyright">Amazon Pay SDK Samples maintained by <a href="https://github.com/amzn">amzn</a></p>
                 <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
             </footer>
         </div>

@@ -4,7 +4,7 @@
 <head>
     <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Login and Pay with Amazon SDK Samples : Login and Pay with Amazon SDK Sample Code">
+    <meta name="description" content="Amazon Pay SDK Samples : Amazon Pay SDK Sample Code">
 
     <script>
         var host = "amzn.github.io";
@@ -33,7 +33,7 @@
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/prism.css">
     <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
 
-    <title>Login and Pay with Amazon SDK Samples</title>
+    <title>Amazon Pay SDK Samples</title>
 </head>
 
 <body>
@@ -41,10 +41,10 @@
     <!-- HEADER -->
     <div id="header_wrap" class="outer">
         <header class="inner">
-            <a id="forkme_banner" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples">View on GitHub</a>
+            <a id="forkme_banner" href="https://github.com/amzn/amazon-pay--sdk-samples">View on GitHub</a>
 
-            <h1 id="project_title" style="margin-top:20px;">Pay with Amazon SDK Samples</h1>
-            <h2 id="project_tagline">Pay with Amazon - Quick Start for a Simple Checkout</h2>
+            <h1 id="project_title" style="margin-top:20px;">Amazon Pay SDK Samples</h1>
+            <h2 id="project_tagline">Amazon Pay - Quick Start for a Simple Checkout</h2>
 
 
         </header>
@@ -131,7 +131,7 @@ Password:      test123</pre>
              language: &quot;en-UK&quot;,
             authorization: function () {
                 loginOptions = { scope: &quot;profile payments:widget payments:shipping_address&quot;, popup: true };
-                authRequest = amazon.Login.authorize(loginOptions, &quot;https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/set.html&quot;);
+                authRequest = amazon.Login.authorize(loginOptions, &quot;https://amzn.github.io/amazon-pay-sdk-samples/set.html&quot;);
             },
             onError: function(error) {
                         // your error handling code.
@@ -153,7 +153,7 @@ Password:      test123</pre>
     <!-- FOOTER  -->
     <div id="footer_wrap" class="outer">
         <footer class="inner">
-            <p class="copyright">Login and Pay with Amazon SDK Samples maintained by <a href="https://github.com/amzn">amzn</a></p>
+            <p class="copyright">Amazon Pay SDK Samples maintained by <a href="https://github.com/amzn">amzn</a></p>
             <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
         </footer>
     </div>
@@ -179,7 +179,7 @@ Password:      test123</pre>
                         scope: "profile payments:widget payments:shipping_address",
                         popup: true
                     };
-                    authRequest = amazon.Login.authorize(loginOptions, "https://amzn.github.io/login-and-pay-with-amazon-sdk-samples/set.html");
+                    authRequest = amazon.Login.authorize(loginOptions, "https://amzn.github.io/amazon-pay-sdk-samples/set.html");
                 },
                 onError: function(error) {
                     // your error handling code.

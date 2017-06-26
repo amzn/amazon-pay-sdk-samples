@@ -3,7 +3,7 @@
     <head>
         <meta charset='utf-8'>
         <meta http-equiv="X-UA-Compatible" content="chrome=1">
-        <meta name="description" content="Login and Pay with Amazon SDK Samples : Login and Pay with Amazon SDK Sample Code">
+        <meta name="description" content="Amazon Pay SDK Samples : Amazon Pay SDK Sample Code">
 
         <script type="text/javascript">
             var host = "amzn.github.io";
@@ -38,7 +38,7 @@
         </script>
 
 
-        <title>Login and Pay with Amazon SDK Samples</title>
+        <title>Amazon Pay SDK Samples</title>
     </head>
 
     <body>
@@ -51,10 +51,10 @@
         <!-- HEADER -->
         <div id="header_wrap" class="outer">
             <header class="inner">
-                <a id="forkme_banner" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-samples">View on GitHub</a>
+                <a id="forkme_banner" href="https://github.com/amzn/amazon-pay-sdk-samples">View on GitHub</a>
 
-                <h1 id="project_title" style="margin-top:20px;">Pay with Amazon SDK Samples</h1>
-                <h2 id="project_tagline">Pay with Amazon Simple Checkout</h2>
+                <h1 id="project_title" style="margin-top:20px;">Amazon Pay SDK Samples</h1>
+                <h2 id="project_tagline">Amazon Pay Simple Checkout</h2>
 
 
             </header>
@@ -71,7 +71,7 @@
                         reference and a subsequesnt <em>Authorize</em> and <em>Capture</em> API call.</p>
                     <p>This concludes the simple checkout example. Click <a onclick='startOver();' href='#'>here</a> to start over.</p>
                     <div class="alert alert-info" style="padding:10px">
-                      If you have not registered for Login and Pay with Amazon click <a target="blank" href="https://payments.amazon.com/signup">here</a>. <br>
+                      If you have not registered for Amazon Pay click <a target="blank" href="https://payments.amazon.com/signup">here</a>. <br>
                       To access our integration guides and all available SDKs click <a target="blank" href="https://payments.amazon.com/documentation">here</a>.
                     </div>
                 </div>
@@ -80,9 +80,9 @@
                 <h2>Code</h2>
                 <p>Here you can see how we made the <em>Confirm</em>, <em>Authorize</em>, and <em>Capture</em> calls. The API calls below will use the same client instantiated on the previous page. </p>
                 <div class="well well-sm">You will need to parse the Authorize API response to obtain the Amazon Authorization Id. This id will be needed to make the Capture API call.</div>
-                <div class="l-python well well-sm">Click here to see the <a target="blank" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-python">Python</a> SDK.</div>
-                <div class="l-ruby well well-sm">Click here to see the <a target="blank" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-ruby">Ruby</a> SDK.</div>
-                <div class="l-php well well-sm">Click here to see the <a  target="blank" href="https://github.com/amzn/login-and-pay-with-amazon-sdk-php">PHP</a> SDK.</div>
+                <div class="l-python well well-sm">Click here to see the <a target="blank" href="https://github.com/amzn/amazon-pay-sdk-python">Python</a> SDK.</div>
+                <div class="l-ruby well well-sm">Click here to see the <a target="blank" href="https://github.com/amzn/amazon-pay-sdk-ruby">Ruby</a> SDK.</div>
+                <div class="l-php well well-sm">Click here to see the <a  target="blank" href="https://github.com/amzn/amazon-pay-sdk-php">PHP</a> SDK.</div>
                 <pre class="l-python"><code class="language-python">
 pretty_confirm = None
 pretty_authorize = None
@@ -122,7 +122,7 @@ return render_template(
     &#x27;confirm.html&#x27;, confirm=pretty_confirm, authorize=pretty_authorize, capture=pretty_capture)</code></pre>
 
 
-                <pre class="l-php"><code class="language-php">namespace PayWithAmazon;
+                <pre class="l-php"><code class="language-php">namespace AmazonPay;
 
 session_start();
 
@@ -293,7 +293,7 @@ return response_hash
         <!-- FOOTER  -->
         <div id="footer_wrap" class="outer">
             <footer class="inner">
-                <p class="copyright">Login and Pay with Amazon SDK Samples maintained by <a href="https://github.com/amzn">amzn</a></p>
+                <p class="copyright">Amazon Pay SDK Samples maintained by <a href="https://github.com/amzn">amzn</a></p>
                 <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
             </footer>
         </div>
