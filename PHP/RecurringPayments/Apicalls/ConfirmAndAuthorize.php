@@ -1,23 +1,13 @@
 <?php
-namespace PayWithAmazon;
 
 session_start();
 
-require_once '../../../PayWithAmazon/Client.php';
+include '../../amazon-pay.phar';
 require_once '../../config.php';
 
-$config = array(
-    'merchant_id' => $merchant_id,
-    'access_key' => $access_key,
-    'secret_key' => $secret_key,
-    'client_id' => $client_id,
-    'region' => 'us',
-    'currency_code' => 'USD',
-    'sandbox' => true
-);
-
 // Instantiate the client object with the configuration
-$client = new Client($config);
+$client = new AmazonPay\Client($amazonpay_config);
+$requestParameters = array();
 
 // Create the parameters array to set the order
 $requestParameters                                = array();
@@ -38,7 +28,7 @@ if ($_POST['action'] == 'authorize') {
     // Required parameters
     $requestParameters['amazon_billing_agreement_id'] = $_SESSION['amazon_billing_agreement_id'];
     $requestParameters['mws_auth_token']              = null;
-    $requestParameters['authorization_amount']        = '1.99';
+    $requestParameters['authorization_amount']        = '150.00';
     $requestParameters['authorization_reference_id']  = uniqid('A01_REF_');
     
     // Optional parameters
@@ -48,22 +38,23 @@ if ($_POST['action'] == 'authorize') {
     $requestParameters['inherit_shipping_address']  = true;
     $requestParameters['seller_note']               = 'sample for Recurring Payment';
     $requestParameters['seller_order_id']           = '1234-RecExample-Order';
-    $requestParameters['store_name']                = 'Saurons fair in Mordor';
+    $requestParameters['store_name']                = 'PHP SDK Sample';
     $requestParameters['custom_information']        = 'Awesome Sample';
     $requestParameters['soft_descriptor']           = null;
     $requestParameters['platform_id']               = null;
     $requestParameters['mws_auth_token']            = null;
     
     $response = $client->authorizeOnBillingAgreement($requestParameters);
-    
-    // Display the Billing Agreement Details Result with the bwlo parameters
+    $responsearray['authorize'] = json_decode($response->toJson());
+
+    // Display the Billing Agreement Details Result with the below parameters
     $requestParameters = array();
     $requestParameters['amazon_billing_agreement_id'] = $_SESSION['amazon_billing_agreement_id'];
     $requestParameters['address_consent_token']       = $_SESSION['access_token'];
     
     $response = $client->getBillingAgreementDetails($requestParameters);
+    $responsearray['details'] = json_decode($response->toJson());
     
-    // Convert the response to Json
-    $json     = json_decode($response->toJson());
-    echo json_encode($json, JSON_PRETTY_PRINT);
+    // Echo the Json encoded array for the Ajax success
+    echo json_encode($responsearray);
 }
