@@ -129,7 +129,7 @@
                 },
                 onError: function(error) {
                     console.log('addressBookWidget: ' + error.getErrorMessage());
-                
+                }
             }).bind("addressBookWidgetDiv");
 
             new OffAmazonPayments.Widgets.Wallet({
