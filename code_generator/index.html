@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Amazon Pay Widget Code Generator</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="components/bootstrap/dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/styles/default.min.css">
+    <base href="/amazon-pay-sdk-samples/code_generator/">
+
+    <script type='text/javascript'>
+        function getURLParameter(name, source) {
+            return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
+                            '([^&;]+?)(&|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+        }
+
+        var accessToken = getURLParameter("access_token", location.hash);
+        if (typeof accessToken === 'string' && accessToken.match(/^Atza/)) {
+            document.cookie = "amazon_Login_accessToken=" + accessToken + ";path=/;secure";
+        }
+
+        window.onAmazonLoginReady = function () {
+            amazon.Login.setClientId("amzn1.application-oa2-client.242a859efb5f47f09847f3f0aebd50ca");
+            amazon.Login.setUseCookie(true);
+        };
+
+     </script>
+
+</head>
+<body ng-app="myApp">
+<div class="container-fluid" ng-controller="indexCtrl">
+    <div class="header clearfix">
+        <div class="row">
+            <div class="col-md-6">
+                <h3 class="text-muted">Amazon Pay Widget Code Generator</h3>
+                <label ng-show="language == 'JP'">＜＜Code Generatorの利用方法は<a href="https://m.media-amazon.com/images/G/09/AmazonPayments/AmazonPayTool_CodeGenerator._CB1198675309_.pdf"  target="_blank">こちら</a>から＞＞</label>
+            </div>
+            <div class="col-md-offset-3 col-md-2">
+                <div class="form-group">
+                    <labe>Language :</labe>
+                    <select class="form-control" id="language" ng-model="language" ng-change="changeLanguage()">
+                        <option value="US">English</option>
+                        <option value="JP">日本語</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row" style="margin-bottom: 5px;">
+        <div class="col-md-offset-3 col-md-6 text-center" style="height: 120px; position: relative; background-color: #ededed;">
+            <label class="label label-default" style="position: absolute; left: 0; top: 0; color;">Button Preview</label>
+            <div style="margin: 20px 5px 5px 5px;" id="AmazonPayButton"></div>
+        </div>
+    </div>
+    <div>
+        <div class="row">
+            <div class="col-md-6">
+                <button class="btn btn-info copy-btn" id="urlcopybutton" style="position: absolute; right: 15px; top: 3px;" data-clipboard-target="#urlCopy" ng-click="showUrlPre()" >
+                    <span class="glyphicon glyphicon-copy glyphicon-align-left" aria-hidden="true"></span> Copy Configuration As URL
+                </button>
+                <form>
+                    <uib-accordion close-others="false">
+                        <uib-accordion-group heading="{{ 'CLIENT_PARAMETERS' | translate }}" is-open="true">
+                            <div>
+                                <pre id="urlCopy" ng-show="urlCopyStatus" >{{urlCopy}}</pre>
+                            </div>
+                            <div class="form-group">
+                                <label>{{ 'SELLER_ID' | translate }}</label>
+                                <input type="text" class="form-control" placeholder="Seller ID"
+                                       ng-model="awp.seller_id" ng-change="changeDisplayScope()">
+                            </div>
+                            <div class="form-group">
+                                <label>{{ 'CLIENT_ID' | translate }}</label>
+                                <input type="text" class="form-control" placeholder="Client ID"
+                                       ng-model="awp.crient_id" ng-change="changeDisplayScope()">
+                            </div>
+                            <div class="form-group">
+                                <label>{{ 'REGION' | translate }}</label>
+                                <div class="radio">
+                                    <label>
+                                        <input type="radio" name="region" value="US" ng-model="awp.region"
+                                               ng-change='changeRegion()'>
+                                        US
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="region" value="UK" ng-model="awp.region"
+                                               ng-change='changeRegion()'>
+                                        UK
+                                    </label>
+                                    <label>
+                                        <input type="radio" name="region" value="DE" ng-model="awp.region"
+                                               ng-change='changeRegion()'>
+                                        DE
+                                    </label>
+                                    <!-- TODO: 地域を変更した際に対応している、ボタンを確認して、Typeを指定できないようにする。 -->
+                                    <label>
+                                        <input type="radio" name="region" value="JP" ng-model="awp.region"
+                                               ng-change='changeRegion()'>
+                                        JP
+                                    </label>
+                                </div>
+                            </div>
+                        </uib-accordion-group>
+                        <uib-accordion-group heading="{{ 'BUTTON_WIDGET_PARAMETERS' | translate }}" is-open="true">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ 'BUTTON_COLOR' | translate}}</label>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio" name="buttonColor"
+                                                     ng-model="awp.buttonInfo.color"
+                                                     ng-change="genButton()"
+                                                     value="Gold">Gold
+                                          </label>
+                                        </span>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio" name="buttonColor"
+                                                     ng-model="awp.buttonInfo.color"
+                                                     ng-change="genButton()"
+                                                     value="LightGray">Light gray
+                                          </label>
+                                        </span>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio" name="buttonColor"
+                                                     ng-model="awp.buttonInfo.color"
+                                                     ng-change="genButton()"
+                                                     value="DarkGray">Dark gray
+                                          </label>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ 'BUTTON_TYPE' | translate }}</label>
+                                        <div ng-repeat="bType in buttonTypes">
+                                            <label ng-hide="bType.disabled">
+                                                <input type="radio" name="buttonType"
+                                                       ng-model="awp.buttonInfo.type"
+                                                       ng-change="genButton()"
+                                                       ng-value="bType.value"> {{bType.name}}
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ 'BUTTON_SIZE' | translate }}</label>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="buttonSize"
+                                                     ng-change="genButton()"
+                                                     ng-model="awp.buttonInfo.size"
+                                                     value="small"> small
+                                          </label>
+                                        </span>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="buttonSize"
+                                                     ng-model="awp.buttonInfo.size"
+                                                     ng-change="genButton()"
+                                                     value="medium"> medium
+                                          </label>
+                                        </span>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="buttonSize"
+                                                     ng-model="awp.buttonInfo.size"
+                                                     ng-change="genButton()"
+                                                     value="large"> large
+                                          </label>
+                                        </span>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="buttonSize"
+                                                     ng-model="awp.buttonInfo.size"
+                                                     ng-change="genButton()"
+                                                     value="x-large"> x-large
+                                          </label>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label>{{ 'TARGET' | translate }}</label>
+                                  <span class="radio">
+                                    <label>
+                                        <input type="checkbox" name="displayScope[login]"
+                                            ng-model="awp.displayInfo.scope.login" value="login" ng-change="changeDisplayScope()"
+                                            ng-true-value="'login'" ng-false-value=""> {{ 'TARGET_LOGIN_BUTTON' | translate }}
+                                    </label>
+                                  </span>
+                                  <span class="radio">
+                                    <label>
+                                        <input type="checkbox" name="displayScope[addressbook]"
+                                               ng-model="awp.displayInfo.scope.addressbook" value="addressbook" ng-change="changeDisplayScope()"
+                                               ng-true-value="'addressbook'" ng-false-value=""> {{ 'TARGET_ADDRESS_BOOK_WIDGET' | translate }}
+                                    </label>
+                                  </span>
+                                  <span class="radio">
+                                    <label>
+                                        <input type="checkbox" name="displayScope[wallet]"
+                                               ng-model="awp.displayInfo.scope.wallet" value="wallet" ng-change="changeDisplayScope()"
+                                               ng-true-value="'wallet'" ng-false-value=""> {{ 'TARGET_WALLET_WIDGET' | translate }}
+                                    </label>
+                                  </span>
+                                  <span class="radio">
+                                    <label ng-show="awp.implementationType == 'autopay'">
+                                        <input type="checkbox" name="displayScope[consent]"
+                                               ng-model="awp.displayInfo.scope.consent" value="consent" ng-change="changeDisplayScope()"
+                                               ng-true-value="'consent'" ng-false-value=""> {{ 'TARGET_CONSENT_WIDGET' | translate }}
+                                    </label>
+                                  </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>{{ 'SCOPE' | translate }}</label>
+                                    <span uib-popover="{{ 'SCOPE_TOOLTIP' | translate }}"
+                                          popover-trigger="mouseenter"
+                                          class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                                    <span class="radio">
+                                    <label>
+                                        <input type="checkbox" name="buttonScope[profile]"
+                                               ng-model="awp.buttonInfo.scope.profile" value="profile" ng-change="changeDisplayScope()"
+                                               ng-true-value="'profile'" ng-false-value="''"> Profile
+                                            <span uib-popover="{{ 'SCOPE_PROFILE_TOOLTIP' | translate }}"
+                                                  popover-trigger="mouseenter" popover-append-to-body="true"
+                                                  class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                                    </label>
+                                  </span>
+                                    <!--<span class="radio">-->
+                                    <!--<label>-->
+                                    <!--<input type="checkbox" name="buttonScope[profile_user_id]"-->
+                                    <!--value="profile:user_id" ng-model="awp.buttonInfo.scope.profile_user_id"-->
+                                    <!--ng-true-value="' profile:user_id'" ng-false-value=""-->
+                                    <!--value="profile:user_id"> profile:user_id-->
+                                    <!--</label>-->
+                                    <!--</span>-->
+                                    <!--<span class="radio">-->
+                                    <!--<label>-->
+                                    <!--<input type="checkbox" name="buttonScope[profile_postal_code]"-->
+                                    <!--ng-model="awp.buttonInfo.scope.profile_postal_code"-->
+                                    <!--ng-true-value="' profile:postal_code'" ng-false-value=""-->
+                                    <!--value="profile:postal_code"> profile:postal_code-->
+                                    <!--</label>-->
+                                    <!--</span>-->
+                                    <span class="radio">
+                                    <label>
+                                        <input type="checkbox" name="buttonScope[payments_widget]"
+                                               ng-model="awp.buttonInfo.scope.payments_widget"
+                                               ng-true-value="' payments:widget'" ng-false-value="''" ng-change="changeDisplayScope()"
+                                               value="payments:widget"> Widget
+                                                <span uib-popover="{{ 'SCOPE_WIDGET_TOOLTIP' | translate }}"
+                                                      popover-trigger="mouseenter" popover-append-to-body="true"
+                                                      class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                                    </label>
+                                  </span>
+                                    <span class="radio">
+                                    <label>
+                                        <input type="checkbox" name="buttonScope[payments_shipping_address]"
+                                               ng-model="awp.buttonInfo.scope.payments_shipping_address"
+                                               ng-true-value="' payments:shipping_address'"
+                                               ng-false-value="''" ng-change="changeDisplayScope()"
+                                               value="payments:shipping_address"> Shipping address
+                                            <span uib-popover="{{ 'SCOPE_ADDRESS_TOOLTIP' | translate }}"
+                                                  popover-trigger="mouseenter" popover-append-to-body="true"
+                                                  class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                                    </label>
+                                  </span>
+                                    <span class="radio">
+                                    <label ng-show="billing_address == 'true'">
+                                        <input type="checkbox" name="buttonScope[payments_billing_address]"
+                                               ng-model="awp.buttonInfo.scope.payments_billing_address"
+                                               ng-true-value="' payments:billing_address'"
+                                               ng-false-value="''" ng-change="changeDisplayScope()"
+                                               value="payments:billing_address"> Billing address
+                                            <span uib-popover="{{ 'SCOPE_BILLING_ADDRESS_TOOLTIP' | translate }}"
+                                                  popover-trigger="mouseenter" popover-append-to-body="true"
+                                                  class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                                    </label>
+                                  </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>{{ 'POPUP' | translate }}</label>
+                                  <span class="radio">
+                                    <label>
+                                        <input type="checkbox" name="buttonPopup"
+                                               ng-model="awp.buttonInfo.popup"
+                                               value=true> Popup
+                                    </label>
+                                  </span>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>{{ 'IMPLEMENTATION_TYPE' | translate }}</label>
+                                    <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="onetime"
+                                                     ng-change="changeImplementationType()"
+                                                     ng-model="awp.implementationType"
+                                                     value="onetime"> {{ 'IMPLEMENTATION_TYPE_ONETIME' | translate }}
+                                          </label>
+                                    </span>
+                                    <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="autopay"
+                                                     ng-change="changeImplementationType()"
+                                                     ng-model="awp.implementationType"
+                                                     value="autopay"> {{ 'IMPLEMENTATION_TYPE_AUTOPAY' | translate }}
+                                          </label>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ 'WIDGET_SIZE' | translate }}</label>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="widget_size_responsible"
+                                                     ng-model="awp.widget_size" ng-change="changeDisplayScope()"
+                                                     value="responsive"> {{ 'WIDGET_SIZE_RESPONSIVE' | translate }}
+                                          </label>
+                                        </span>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="widget_size_smartphone"
+                                                     ng-model="awp.widget_size" ng-change="changeDisplayScope()"
+                                                     value="smartphoneCollapsible"> {{ 'WIDGET_SIZE_SMARTPHONE' | translate }}
+                                          </label>
+                                        </span>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="widget_size_responsible"
+                                                     ng-model="awp.widget_size" ng-change="changeDisplayScope()"
+                                                     value="custom"> {{ 'WIDGET_SIZE_CUSTOM' | translate }}
+                                          </label>
+                                        </span>
+                                        <span class="text" ng-show="awp.widget_size == 'custom'">
+                                            Width:
+                                            <span uib-popover="{{ 'WIDGET_SIZE_WIDTH_TOOLTIP' | translate }}"
+                                                  popover-trigger="mouseenter"
+                                                  class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+
+                                            <input type="text" class="form-control" ng-change="changeDisplayScope()" size="3"
+                                                   ng-model="awp.widget_size_width" ng-show="awp.widget_size == 'custom'">
+                                            Height:
+                                            <span uib-popover="{{ 'WIDGET_SIZE_HEIGHT_TOOLTIP' | translate }}"
+                                                  popover-trigger="mouseenter"
+                                                  class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+                                            <input type="text" class="form-control" ng-change="changeDisplayScope()"
+                                                   ng-model="awp.widget_size_height" ng-show="awp.widget_size == 'custom'">
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label>{{ 'REDIRECT_URL' | translate }}</label>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="redirect_url"
+                                                     ng-model="awp.redirect_url_type" ng-change="changeDisplayScope()"
+                                                     value="url"> URL
+                                          </label>
+                                        </span>
+                                        <span class="radio">
+                                          <label>
+                                              <input type="radio"
+                                                     name="redirect_javascript"
+                                                     ng-model="awp.redirect_url_type"  ng-change="changeDisplayScope()"
+                                                     value="javascript"> Javascript
+                                          </label>
+                                        </span>
+                                        <input type="text" class="form-control" ng-change="changeDisplayScope()"
+                                               ng-model="awp.redirect_url" ng-show="awp.redirect_url_type == 'url'">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label>{{ 'INCLUDE_SCRIPT' | translate }}</label>
+                                    <span class="radio">
+                                        <label>
+                                            <input type="checkbox"
+                                               ng-true-value="'async'"
+                                               ng-false-value="''"
+                                               ng-model="awp.asynchronous"
+                                               ng-change="updateScriptTag()"
+                                               value="'async'"> Asynchronous
+                                        </label>
+                                    </span>
+                                </div>
+                            </div>
+                        </uib-accordion-group>
+                    </uib-accordion>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div style="position: relative">
+                            <button class="btn btn-info copy-btn" id="htmlcopybutton" style="position: absolute; right: 0; top: 0;" data-clipboard-target="#htmlcode">
+                                <span class="glyphicon glyphicon-copy glyphicon-align-left" aria-hidden="true"></span> Copy HTML
+                            </button>
+                            <pre highlight id="htmlcode">
+{{script.htmlStart}}
+{{script.bodyStart}}
+  {{script.buttonDivContainer}}{{script.buttonDiv}}{{script.buttonExplanation}}{{script.buttonDivContainerEnd}}{{script.logoutButton}}
+  {{script.addressBookWidgetDiv}}
+  {{script.walletWidgetDiv}}
+  {{script.consentWidgetDiv}}
+  {{script.start}}
+    // get access token
+    function getURLParameter(name, source) {
+        return decodeURIComponent((new RegExp('[?|&|#]' + name + '=' +
+                        '([^{{script.amp}};]+?)({{script.amp}}|#|;|$)').exec(source) || [, ""])[1].replace(/\+/g, '%20')) || null;
+    }
+
+    var accessToken = getURLParameter("access_token", location.hash);
+    if (typeof accessToken === 'string' {{script.amp}}{{script.amp}} accessToken.match(/^Atza/)) {
+        document.cookie = "amazon_Login_accessToken=" + accessToken + ";path=/;secure";
+    }
+
+    window.onAmazonLoginReady = function() {
+      {{script.useCookie}}
+      amazon.Login.setClientId("{{awp.crient_id}}");
+    };
+
+    window.onAmazonPaymentsReady = function() {
+      {{script.showLoginButton}}
+      {{script.showAddressBookWidget}}
+      {{script.showWalletWidget}}
+    };
+
+    document.getElementById('Logout').onclick = function() {
+      amazon.Login.logout();
+      document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
+      window.location.href = '/';
+    };
+  {{script.end}}
+
+  {{script.start}}
+    {{script.showLoginButtonDetail}}
+    {{script.showAddressBookWidgetDetail}}
+    {{script.showWalletWidgetDetail}}
+    {{script.showConsentWidgetDetail}}
+  {{script.end}}
+  {{script.widgetJS}}
+{{script.bodyEnd}}
+{{script.htmlEnd}}</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="components/angular/angular.min.js" charset="utf-8"></script>
+    <script src="components/angular-animate/angular-animate.min.js" charset="utf-8"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.1.0/highlight.min.js"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap.min.js" charset="utf-8"></script>
+    <script src="components/angular-bootstrap/ui-bootstrap-tpls.min.js" charset="utf-8"></script>
+    <script src="components/angular-translate/angular-translate.min.js" charset="utf-8"></script>
+    <script src="components/clipboard/dist/clipboard.min.js" charset="utf-8"></script>
+    <script src="js/app.js" charset="utf-8"></script>
+    <footer class="footer">
+        <p>&copy; 2017 Company, Inc.</p>
+    </footer>
+</div> <!-- /container -->
+<a href="https://github.com/johna1203/pwa-widget-generator"><img
+        style="position: absolute; top: 0; right: 0; border: 0;"
+        src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+        alt="Fork me on GitHub"
+        data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+
+
+
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-29161394-8', 'auto');
+    ga('send', 'pageview');
+
+</script>
+</body>
+</html>

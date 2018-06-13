@@ -1,0 +1,22 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+pre.code {
+  display: block;
+  padding: 0;
+  margin: 0;
+  font-size: 12px;
+  color: #333;
+  background-color: inherit;;
+  border: none;
+  border-radius: 0;
+  line-height: 1.42857;
+  word-break: break-all;
+  word-wrap: break-word;
+}
