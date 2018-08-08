@@ -15,7 +15,6 @@ $requestParameters['currency_code']     = $amazonpay_config['currency_code'];
 $requestParameters['seller_note']       = 'Testing PHP SDK Samples';
 $requestParameters['seller_order_id']   = '123456-TestOrder-123456';
 $requestParameters['store_name']        = 'SDK Sample Store Name';
-$requestParameters['seller_order_id']   = '1234-example-order';
 $requestParameters['custom_information']= 'Any custom information';
 $requestParameters['mws_auth_token']    = null; // only non-null if calling API on behalf of someone else
 $requestParameters['amazon_order_reference_id'] = $_POST['orderReferenceId'];
