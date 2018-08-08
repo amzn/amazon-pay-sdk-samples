@@ -22,6 +22,7 @@ $responsearray['confirm'] = json_decode($response->toJson());
 if ($client->success)
 {
     $requestParameters['authorization_amount'] = '19.95';
+    $requestParameters['currency_code'] = 'EUR';
     $requestParameters['authorization_reference_id'] = uniqid();
     $requestParameters['seller_authorization_note'] = 'Authorizing and capturing the payment';
     $requestParameters['transaction_timeout'] = 0;
