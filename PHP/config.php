@@ -24,13 +24,13 @@ function getWidgetsJsURL($config)
             return "https://static-na.payments-amazon.com/OffAmazonPayments/us/" . $sandbox . "js/Widgets.js";
             break;
         case "uk":
-            return "https://static-eu.payments-amazon.com/OffAmazonPayments/uk/" . $sandbox . "lpa/js/Widgets.js";
+            return "https://static-eu.payments-amazon.com/OffAmazonPayments/gbp/" . $sandbox . "lpa/js/Widgets.js";
             break;
         case "jp":
             return "https://static-fe.payments-amazon.com/OffAmazonPayments/jp/" . $sandbox . "lpa/js/Widgets.js";
             break;
         default:
-            return "https://static-eu.payments-amazon.com/OffAmazonPayments/de/" . $sandbox . "lpa/js/Widgets.js";
+            return "https://static-eu.payments-amazon.com/OffAmazonPayments/eur/" . $sandbox . "lpa/js/Widgets.js";
             break;
     }
 }
