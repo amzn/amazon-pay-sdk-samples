@@ -33,8 +33,11 @@ Next, you need to add your keys and secrets from Seller Central into the config.
 From your favorite webrowser, navigate to:
   http://localhost/amazon-pay-sdk-samples/PHP
 
-You will need a **sandbox test account** to run the sample, which you can create in Seller Central's Sandbox/Test Account screen, but if you are in a hurry, you can use this:
-```
-  Username: payment-test@amazon.com
-  Password: test123
-```
+You will need a **sandbox test account** to run the sample.
+
+To create a **sandbox test account**:
+1. Login to Seller Central
+1. Select "Amazon Pay (Sandbox View)" from the picklist at the top of the screen
+1. Hover over the "Integration" option at the top of the screen
+1. Select "Test Accounts" from the Integration menu
+1. Click the "Create a new test account" button and follow the instructions
