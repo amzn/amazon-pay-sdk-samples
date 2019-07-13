@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <script type='text/javascript'>
+        window.onAmazonLoginReady = function () {
+            amazon.Login.setClientId("{{ session['client_id'] }}");
+            amazon.Login.setUseCookie(true);
+        };
+    </script>
+    <script type='text/javascript' src='https://static-eu.payments-amazon.com/OffAmazonPayments/de/sandbox/lpa/js/Widgets.js'></script>
+{% endblock head %}
+
+{% block content %}
+    <h2>Confirm</h2>
+    <p>Congratulations! You are now a proud owner of the official Amazon Pay 
+    Python Software Development Kit!</p>
+    <p>At this point we will make the <em>Confirm</em> API call to confirm the order 
+    reference and a subsequesnt <em>Authorize</em> and <em>Capture</em> API call. 
+    If you used a test account associated with your email address you should receive 
+    an email.</p>
+    <p>This concludes the Python simple checkout example.</p>
+{% endblock content %}

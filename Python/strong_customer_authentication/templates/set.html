@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {{ super() }}
+    <script type='text/javascript'>
+        window.onAmazonLoginReady = function () {
+            amazon.Login.setClientId('{{ session['client_id'] }}');
+            amazon.Login.setUseCookie(true);
+        };
+    </script>
+    <script type='text/javascript' src='https://static-eu.payments-amazon.com/OffAmazonPayments/de/sandbox/lpa/js/Widgets.js'></script>
+{% endblock head %}
+
+{% block content %}
+    <h2>Select Shipping and Payment Method</h2>
+    <p style="margin-top:20px;">Select your billing address and payment method
+    from the widgets below.</p>
+    <p>Notice in the URL above there are several parameters available.
+    The 'access_token' should be saved in order to obtain address line one and
+    two of the shipping address associated with the payment method.</p>
+    <p><pre><code>{{ session['access_token'] }}</code></pre></p>
+    <p>This is known as the address consent token. It is passed to the <em>GetOrderReferenceDetails</em> API
+    call to retrieve information about the order reference Id that is generated
+    by the widgets.</p>
+    <p>If you see a error message in the widgets you will need to
+    start over. This usually indicates that your session has expired. If the problem
+    persists please contact developer support.</p>
+
+    <div class="text-center" style="margin-top:40px;">
+        <div id="addressBookWidgetDiv" style="width:400px; height:240px; display:inline-block;"></div>
+        <div id="walletWidgetDiv" style="width:400px; height:240px; display:inline-block;"></div>
+        <div style="clear:both;"></div>
+        <form class="form-horizontal" style="margin-top:40px;" role="form" id="placeOrderForm" name="placeOrderForm">
+            <div id="ajax-loader" style="display:none;"><img src="{{ url_for('static', filename='img/ajax-loader.gif') }}" /></div>
+        </form>
+		<div class="buttons">
+			<button id="buyNowBtn" class="btn btn-lg btn-success">Place Order</button>
+		</div>
+    </div>
+    <script type="text/javascript">
+        var order ='';
+        new OffAmazonPayments.Widgets.AddressBook({
+            sellerId: '{{ session['merchant_id'] }}',
+            onOrderReferenceCreate: function (orderReference) {
+                // make a call to the back-end that will set order reference details
+                // and get order reference details. This will set the order total
+                // to 19.95 and return order reference details.
+                order = orderReference.getAmazonOrderReferenceId();
+                console.log(order);
+                $.post("/get_details", {
+                    orderReferenceId: order
+                }).done(function (data) {
+                    $("#get_details_response").html(data);
+                });
+            },
+            onAddressSelect: function (orderReference) {
+            },
+            design: {
+                designMode: 'responsive'
+            },
+            onError: function (error) {
+                // your error handling code
+            }
+        }).bind("addressBookWidgetDiv");
+
+        new OffAmazonPayments.Widgets.Wallet({
+            sellerId: '{{ session['merchant_id'] }}',
+            onPaymentSelect: function (orderReference) {
+            },
+            design: {
+                designMode: 'responsive'
+            },
+            onError: function (error) {
+                // your error handling code
+            }
+        }).bind("walletWidgetDiv");
+
+        function placeOrder(confirmationFlow) {
+      		$.ajax({
+      			url: "/confirm",
+      			type: "POST",
+      			data: $('#placeOrderForm').serialize(),
+      			success: function(data) {
+      				confirmationFlow.success();
+      			},
+      				error: function(data) {
+      					confirmationFlow.error();
+      				},
+      			timeout: 3000
+      		});
+      	}
+
+	var buyNowBtn = document.getElementById("buyNowBtn");
+
+	buyNowBtn.addEventListener('click', function () {
+		OffAmazonPayments.initConfirmationFlow('{{ session['merchant_id'] }}', '{{ session['order_reference_id'] }}', function(confirmationFlow) {
+				placeOrder(confirmationFlow);
+			});
+	});
+
+    </script>
+{% endblock content%}

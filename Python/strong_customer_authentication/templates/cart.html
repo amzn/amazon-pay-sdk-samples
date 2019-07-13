@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+{% endblock head %}
+
+{% block content %}
+    <h2>Test Cart</h2>
+    <p style="margin-top:20px;">This is a test cart to show which calls need to
+    be made to allow a buyer to make a purchase. You will need a <strong>test account</strong>
+    before proceeding. Test accounts can be created in Seller Central.</p>
+    <p>Note: This is a <strong>sandbox</strong> transaction. Your <strong>payment method</strong> will <strong>not be charged</strong>.</p>
+    <div class="panel panel-default" style="margin-top:25px;">
+      <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Description</th>
+                  <th class="text-center">Quantity</th>
+                  <th class="text-center">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td><div class="btn btn-default"><img class="media-object" src="{{ url_for('static', filename='img/python-icon.png') }}" alt="Python SDK"></div></td>
+                    <td>
+                        <div><strong>Deluxe Amazon Pay Python Software Development Kit</strong></div>
+                        <div><em>This SDK will allow you to integrate with Amazon Pay seamlessly and efforlessly.
+                        For more information visit the <a target='_new' href='https://github.com/amzn/login-and-pay-with-amazon-sdk-python'>Amazon Pay on GitHub site</a>.</em></div>
+
+                    </td>
+                    <td class="text-center">1</td>
+                    <td class="text-center">19.95</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+    <div class="text-center" style="margin-top:40px;" id="AmazonPayButton"></div>
+    <script type='text/javascript'>
+        window.onAmazonLoginReady = function () {
+            amazon.Login.setClientId('{{ session['client_id'] }}');
+            amazon.Login.setUseCookie(true);
+        };
+    </script>
+    <script type='text/javascript' src='https://static-eu.payments-amazon.com/OffAmazonPayments/de/sandbox/lpa/js/Widgets.js'></script>
+    <script type='text/javascript'>
+        var authRequest;
+        OffAmazonPayments.Button("AmazonPayButton", "{{ session['merchant_id'] }}", {
+            type: "PwA",
+            authorization: function () {
+                loginOptions = {scope: "profile postal_code payments:widget payments:shipping_address", popup: true};
+                authRequest = amazon.Login.authorize(loginOptions, "/set");
+            },
+            onError: function (error) {
+                // something bad happened
+            }
+        });
+
+    </script>
+{% endblock content %}
