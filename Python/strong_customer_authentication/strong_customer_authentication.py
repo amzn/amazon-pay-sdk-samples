@@ -29,8 +29,7 @@ def cart():
     session['mws_access_key'] = request.form['mws-access-key']
     session['mws_secret_key'] = request.form['mws-secret-key']
     session['client_id'] = request.form['client-id']
-    session['success_url'] = request.form['success-url']
-    session['failure_url'] = request.form['failure-url']
+    session['host'] = request.form['host']
     session['order_reference_id'] = 'S01-9969307-1083016'
     return render_template('cart.html')
 
@@ -60,16 +59,10 @@ def confirm():
         log_level="DEBUG")
 
     print(session)
-    if not str(session['failure_url']):
-       response = client.confirm_order_reference(
-            amazon_order_reference_id=session['order_reference_id'],
-            success_url=session['success_url'],
-            failure_url=None)
-    else:
-       response = client.confirm_order_reference(
-            amazon_order_reference_id=session['order_reference_id'],
-            success_url=session['success_url'],
-            failure_url=session['failure_url'])
+    response = client.confirm_order_reference(
+        amazon_order_reference_id=session['order_reference_id'],
+        success_url=session['host'] + 'finish',
+        failure_url=session['host'] + 'cancel')
 
     pretty_confirm = json.dumps(
         json.loads(
@@ -155,9 +148,38 @@ def finish():
     #TODO add error handling for canceled orders
     return pretty_authorize
 
+@app.route('/cancel', methods=['GET'])
+def cancel():
+    from amazon_pay.client import AmazonPayClient
+
+    pretty_cancel = None
+
+    client = AmazonPayClient(
+        mws_access_key=session['mws_access_key'],
+        mws_secret_key=session['mws_secret_key'],
+        merchant_id=session['merchant_id'],
+        sandbox=True,
+        region='eu',
+        currency_code='EUR',
+        log_enabled=True,
+        log_file_name="log.log",
+        log_level="DEBUG")
+
+
+    response = client.cancel_order_reference(
+          amazon_order_reference_id=session['order_reference_id'],
+          cancelation_reason=None,
+          merchant_id=session['merchant_id'],
+          mws_auth_token=None)
+
+    pretty_cancel = json.dumps(
+                json.loads(
+                response.to_json()),
+                indent=4)
+    return pretty_cancel
+
 def rand():
     return random.randint(0, 9999) + random.randint(0, 9999)
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',port='5000')
