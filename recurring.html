@@ -156,8 +156,6 @@
             var authRequest;
             OffAmazonPayments.Button("AmazonPayButton", "A1U65N017TFV5S", {
                 type: "PwA",
-                width: 100,
-                height: 50,
                 authorization: function () {
                     loginOptions = {scope: "profile postal_code payments:widget payments:shipping_address", popup: true};
                     authRequest = amazon.Login.authorize(loginOptions, "https://amzn.github.io/amazon-pay-sdk-samples/set_recurring.html");
