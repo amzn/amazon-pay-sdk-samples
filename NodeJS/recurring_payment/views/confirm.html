@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% parent %}
+    <script type='text/javascript'>
+        window.onAmazonLoginReady = function () {
+            amazon.Login.setClientId("{{ session['client_id'] }}");
+            amazon.Login.setUseCookie(true);
+        };
+    </script>
+    <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
+{% endblock %}
+
+{% block content %}
+    <h2>Recurring Simulation</h2>
+    <p style="margin-top:40px;">This will make authorizations on the billing agreement every <strong>10</strong> seconds. We will
+    authorize 1.99 to simulate the recurring charge.</p>
+    <div class="text-center" style="margin-top:10px;">
+        <button id="pause-cycle" class="btn btn-danger">Pause</button>
+    </div>
+    <div class="text-center" style="height:140px; padding-top:20px;">
+        <input type="text" data-width="100" value="50" class="dial" data-fgColor="#888" data-bgColor="#fafafa" style="padding:0; margin:0;" />
+    </div>
+    <div id="authorize-response"><pre><code>Waiting for authorization...</code></pre></div>
+    <script type="text/javascript">
+        var countdown = 0;
+        $(function() {
+            $('.dial').knob({
+                'min': 0,
+                'max': 10,
+                'val': 0,
+                'readOnly': false
+            });
+        });
+        tick();
+        function tick() {
+            $('.dial').val(countdown).trigger('change');
+            timeout = setTimeout('tick()', 1000);
+            countdown++;
+            if(countdown > 10) {
+                clearTimeout(timeout);
+                $.notify('Authorizing', {
+                    className: 'success',
+                    autoHide: true,
+                    globalPosition: 'top center',
+                    autoHideDelay: 3000
+                });
+                $.post("/authorize", {
+                    amazon_billing_agreement_id: ''
+                }).done(function (data) {
+                    $("#authorize-response").html('<pre><code>'+data+'</pre></code>');
+                    timeout = setTimeout('tick()', 1000);
+
+                });
+                countdown = 0;
+            }
+        }
+        $('#pause-cycle').on('click', function () {
+            if($(this).hasClass('btn-danger')) {
+                $(this).removeClass('btn-danger').addClass('btn-success');
+                $(this).text('Continue');
+                clearTimeout(timeout);
+            } else {
+                $(this).removeClass('btn-success').addClass('btn-danger');
+                $(this).text('Pause');
+                timeout = setTimeout('tick()', 1000);
+            }
+        });
+    </script>
+{% endblock  %}
+
+{% block api %}
+<p>Since the subscription was confirmed we can now confirm the billing agreement.</p>
+<pre><code class="language-python">from amazon_pay.client import AmazonPayClient
+
+client = AmazonPayClient(
+    mws_access_key=session['mws_access_key'],
+    mws_secret_key=session['mws_secret_key'],
+    merchant_id=session['merchant_id'],
+    sandbox=True,
+    region='na',
+    currency_code='USD')
+
+response = client.confirm_billing_agreement(
+    amazon_billing_agreement_id=session['billing_agreement_id'])
+
+pretty = json.dumps(
+    json.loads(
+        response.to_json()),
+    indent=4)
+return pretty
+
+return render_template('confirm.html', confirm=pretty)
+</code></pre>
+
+<p>The <em>ConfirmBillingAgreement</em> API call does not return any special values. If it were
+unsuccessful you would see an error response.</p>
+<pre><code>{{ confirm_response }} </code></pre>
+
+<p>This is how to make an authorization on the billing agreement.</p>
+<pre><code class="language-python">from amazon_pay.client import AmazonPayClient
+
+client = AmazonPayClient(
+    mws_access_key=session['mws_access_key'],
+    mws_secret_key=session['mws_secret_key'],
+    merchant_id=session['merchant_id'],
+    sandbox=True,
+    region='na',
+    currency_code='USD')
+
+response = client.authorize_on_billing_agreement(
+    amazon_billing_agreement_id=session['billing_agreement_id'],
+    authorization_reference_id=rand(),
+    authorization_amount='1.99',
+    seller_authorization_note='Python SDK payment authorization.',
+    transaction_timeout=0,
+    capture_now=True)
+
+response = client.get_billing_agreement_details(
+    amazon_billing_agreement_id=session['billing_agreement_id'],
+    address_consent_token=session['access_token'])
+
+pretty = json.dumps(
+    json.loads(
+        response.to_json()),
+    indent=4)
+return pretty
+</code></pre>
+{% endblock %}

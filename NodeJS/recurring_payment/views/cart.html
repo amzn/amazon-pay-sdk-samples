@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block head %}
+    {% parent %}
+{% endblock head %}
+
+{% block content %}
+    <h2>Test Cart</h2>
+    <p style="margin-top:20px;">This is a test cart to show which calls need to
+    be made to allow a buyer to make a purchase. You will need a <strong>test account</strong>
+    before proceeding. Test accounts can be created in Seller Central.</p>
+    <p>Note: This is a <strong>sandbox</strong> transaction. Your <strong>payment method</strong> will <strong>not be charged</strong>.</p>
+    <div class="panel panel-default" style="margin-top:25px;">
+      <div class="panel-body">
+        <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Description</th>
+                  <th class="text-center">Quantity</th>
+                  <th class="text-center text-nowrap">Billing Cycle</th>
+                  <th class="text-center">Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                    <td><div class="btn btn-default"><img class="media-object" src="images/python-icon.png" alt="Python SDK"></div></td>
+                    <td>
+                        <div><strong>Deluxe Amazon Pay Python SDK Support Subscription</strong></div>
+                        <div><em>This will subscribe you to our Python SDK developer channel. You will receive new updates and features as they are released along with unlimited developer support.</em></div>
+
+                    </td>
+                    <td class="text-center">1</td>
+                    <td class="text-center text-nowrap">Every 10 seconds</td>
+                    <td class="text-center">1.99/cycle</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+      </div>
+    </div>
+    <div class="text-center" style="margin-top:40px;" id="AmazonPayButton"></div>
+    <script type='text/javascript'>
+        window.onAmazonLoginReady = function () {
+            amazon.Login.setClientId("{{ session['client_id'] }}");
+            //amazon.Login.setClientId('{{ session['client_id'] }}');
+            amazon.Login.setUseCookie(true);
+        };
+    </script>
+    <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
+    <script type='text/javascript'>
+        var authRequest;
+        OffAmazonPayments.Button("AmazonPayButton", "{{ session['merchant_id'] }}", {
+            type: "PwA",
+            authorization: function () {
+                loginOptions = {scope: "profile postal_code payments:widget payments:shipping_address", popup: true};
+                authRequest = amazon.Login.authorize(loginOptions, "/set");
+            },
+            onError: function (error) {
+                // something bad happened
+            }
+        });
+    </script>
+{% endblock  %}
+{% block api %}
+<p>Create the button container.</p>
+<pre><code class="language-markup">&#x3C;div id=&#x22;AmazonPayButton&#x22;&#x3E;&#x3C;/div&#x3E;
+</pre></code>
+
+<p>Add script to set the client Id.</p>
+<pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId(&#x27;{{ session['client_id'] }}&#x27;);
+        amazon.Login.setUseCookie(true);
+    };
+&#x3C;/script&#x3E;
+</pre></code>
+
+<p>Import widgets javascript. This must be loaded after you set the client Id above.</p>
+<pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;
+</pre></code>
+
+<p>Render the button. Note: You will need to add your domain to 'Allowed JavaScript
+Origins' in Seller Central. If you are testing locally you can use 'http://localhost:5000'.
+Production sites must have a valid certificate and use https.</p>
+<pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
+    var authRequest;
+    OffAmazonPayments.Button(&#x22;AmazonPayButton&#x22;, &#x22;{{ session['merchant_id'] }}&#x22;, {
+        type: &#x22;PwA&#x22;,
+        authorization: function () {
+            loginOptions = {scope: &#x22;profile postal_code payments:widget payments:shipping_address&#x22;, popup: true};
+            authRequest = amazon.Login.authorize(loginOptions, &#x22;/set&#x22;);
+        },
+        onError: function (error) {
+            // something bad happened
+        }
+    });
+&#x3C;/script&#x3E;</code></pre>
+</code></pre>
+
+{% endblock  %}

@@ -1,3 +1,5 @@
+*~
+.*~
 *.pyc
 /dist/
 /build/
@@ -66,3 +68,7 @@ localtest.py
 
 #idea
 .idea
+
+#Node
+node_modules/
+NodeJS/recurring_payment/config/settings.js
