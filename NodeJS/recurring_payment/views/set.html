@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% parent %}
+    <script type='text/javascript'>
+        window.onAmazonLoginReady = function () {
+            amazon.Login.setClientId("{{ session['client_id'] }}");
+            amazon.Login.setUseCookie(true);
+        };
+    </script>
+    <script type='text/javascript' src='https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js'></script>
+{% endblock %}
+
+{% block content %}
+    <h2>Select Shipping and Payment Method</h2>
+    <p style="margin-top:20px;">Select your billing address and payment method
+    from the widgets below.</p>
+    <p>Notice in the URL above there are several parameters available.
+    The 'access_token' should be saved in order to obtain address line one and
+    two of the shipping address associated with the payment method.</p>
+    <p><pre><code>{{ session['access_token'] }}</code></pre></p>
+    <p>This is known as the address consent token. It is passed to the <em>GetBillingAgreementDetails</em> API
+    call to retrieve information about the billing agreement Id that is generated
+    by the widgets.</p>
+    <p>If you see a error message in the widgets you will need to
+    start over. This usually indicates that your session has expired. If the problem
+    persists please contact developer support.</p>
+
+    <div class="text-center" style="margin-top:40px;">
+        <div id="addressBookWidgetDiv" style="width:250px; height:200px; display:inline-block;"></div>
+        <div id="walletWidgetDiv" style="width:250px; height:200px; display:inline-block;"></div>
+        <div id="consentWidgetDiv" style="width:250px; height:200px; display:inline-block;"></div>
+        <div style="clear:both;"></div>
+        <form class="form-horizontal" style="margin-top:40px;" role="form" method="post" action="/confirm">
+            <button id="place-order" class="btn btn-lg btn-success">Confirm Subscription</button>
+            <div id="ajax-loader" style="display:none;"><img src="images/ajax-loader.gif" /></div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        $('#place-order').prop('disabled', true);
+        var billingAgreementId;
+
+        new OffAmazonPayments.Widgets.AddressBook({
+            sellerId: "{{ session['merchant_id'] }}",
+            agreementType: 'BillingAgreement',
+            onReady: function (billingAgreement) {
+                billingAgreementId = billingAgreement.getAmazonBillingAgreementId();
+                get_details(billingAgreementId);
+
+                // render the consent and payment method widgets once the
+                // address book has loaded
+                new OffAmazonPayments.Widgets.Consent({
+                    sellerId: "{{ session['merchant_id'] }}",
+                    // amazonBillingAgreementId obtained from the Amazon Address Book widget.
+                    amazonBillingAgreementId: billingAgreementId,
+                    design: {
+                        designMode: 'responsive'
+                    },
+                    onReady: function (billingAgreementConsentStatus) {
+                        // Called after widget renders
+                        // getConsentStatus returns true or false
+                        // true – checkbox is selected
+                        // false – checkbox is unselected - default
+                    },
+                    onConsent: function (billingAgreementConsentStatus) {
+                        buyerBillingAgreementConsentStatus = billingAgreementConsentStatus.getConsentStatus();
+
+                        if(buyerBillingAgreementConsentStatus == 'true') {
+                            $('#place-order').prop('disabled', false);
+                        } else {
+                            $('#place-order').prop('disabled', true);
+                        }
+
+                        get_details(billingAgreementId);
+                        // getConsentStatus returns true or false
+                        // true – checkbox is selected – buyer has consented
+                        // false – checkbox is unselected – buyer has not consented
+
+                        // Replace this code with the action that you want to perform
+                        // after the consent checkbox is selected/unselected.
+                    },
+                    onError: function (error) {
+                        // your error handling code
+                    }
+                }).bind("consentWidgetDiv");
+
+                new OffAmazonPayments.Widgets.Wallet({
+                    sellerId: "{{ session['merchant_id'] }}",
+                    amazonBillingAgreementId: billingAgreementId,
+                    onPaymentSelect: function (orderReference) {
+                    },
+                    design: {
+                        designMode: 'responsive'
+                    },
+                    onError: function (error) {
+                        // your error handling code
+                    }
+                }).bind("walletWidgetDiv");
+            },
+            onAddressSelect: function (orderReference) {
+            },
+            design: {
+                designMode: 'responsive'
+            },
+            onError: function (error) {
+                // your error handling code
+            }
+        }).bind("addressBookWidgetDiv");
+
+        function get_details(billingAgreementId) {
+            $.post("/get_details", {
+                billingAgreementId: billingAgreementId
+            }).done(function (data) {
+                $("#get_details_response").html(data);
+            });
+        }
+    </script>
+{% endblock %}
+
+{% block api %}
+<p>Create the widget containers.</p>
+<pre><code class="language-markup">&#x3C;div id=&#x22;addressBookWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
+&#x3C;div id=&#x22;walletWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
+&#x3C;div id=&#x22;consentWidgetDiv&#x22; style=&#x22;width:400px; height:240px;&#x22;&#x3E;&#x3C;/div&#x3E;
+</pre></code>
+
+<p>Add script to set the client Id just as you did for displaying the Amazon Pay button.</p>
+<pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27;&#x3E;
+    window.onAmazonLoginReady = function () {
+        amazon.Login.setClientId(&#x27;{{ session['client_id'] }}&#x27;);
+        amazon.Login.setUseCookie(true);
+    };
+&#x3C;/script&#x3E;
+</pre></code>
+
+<p>Import widgets javascript. This must be loaded after you set the client Id above.</p>
+<pre><code class="language-javascript">&#x3C;script type=&#x27;text/javascript&#x27; src=&#x27;https://static-na.payments-amazon.com/OffAmazonPayments/us/sandbox/js/Widgets.js&#x27;&#x3E;&#x3C;/script&#x3E;
+</pre></code>
+
+<p>Add the widgets code. You can use the <em>onReady</em> method to
+obtain information about the billing agreement Id. In the example, we are using jQuery
+to make a AJAX POST. The 'Confirm Subscription' button is enabled and disabled depending on
+the status of the consent.</p>
+<p>We also render the consent and wallet widgets once the address
+widget is loaded. This will ensure they get a valid billing agreement.</p>
+<pre><code class="language-javascript">&lt;script type=&quot;text/javascript&quot;&gt;
+    $('#place-order').prop('disabled', true);
+    var billingAgreementId;
+
+    new OffAmazonPayments.Widgets.AddressBook({
+        sellerId: '{{ session['merchant_id'] }}',
+        agreementType: 'BillingAgreement',
+        onReady: function (billingAgreement) {
+            billingAgreementId = billingAgreement.getAmazonBillingAgreementId();
+            get_details(billingAgreementId);
+
+            // render the consent and payment method widgets once the
+            // address book has loaded
+            new OffAmazonPayments.Widgets.Consent({
+                sellerId: '{{ session['merchant_id'] }}',
+                // amazonBillingAgreementId obtained from the Amazon Address Book widget.
+                amazonBillingAgreementId: billingAgreementId,
+                design: {
+                    designMode: 'responsive'
+                },
+                onReady: function (billingAgreementConsentStatus) {
+                    // Called after widget renders
+                    // getConsentStatus returns true or false
+                    // true &ndash; checkbox is selected
+                    // false &ndash; checkbox is unselected - default
+                },
+                onConsent: function (billingAgreementConsentStatus) {
+                    buyerBillingAgreementConsentStatus = billingAgreementConsentStatus.getConsentStatus();
+
+                    if(buyerBillingAgreementConsentStatus == 'true') {
+                        $('#place-order').prop('disabled', false);
+                    } else {
+                        $('#place-order').prop('disabled', true);
+                    }
+
+                    get_details(billingAgreementId);
+                    // getConsentStatus returns true or false
+                    // true &ndash; checkbox is selected &ndash; buyer has consented
+                    // false &ndash; checkbox is unselected &ndash; buyer has not consented
+
+                    // Replace this code with the action that you want to perform
+                    // after the consent checkbox is selected/unselected.
+                },
+                onError: function (error) {
+                    // your error handling code
+                }
+            }).bind(&quot;consentWidgetDiv&quot;);
+
+            new OffAmazonPayments.Widgets.Wallet({
+                sellerId: '{{ session['merchant_id'] }}',
+                amazonBillingAgreementId: billingAgreementId,
+                onPaymentSelect: function (orderReference) {
+                },
+                design: {
+                    designMode: 'responsive'
+                },
+                onError: function (error) {
+                    // your error handling code
+                }
+            }).bind(&quot;walletWidgetDiv&quot;);
+        },
+        onAddressSelect: function (orderReference) {
+        },
+        design: {
+            designMode: 'responsive'
+        },
+        onError: function (error) {
+            // your error handling code
+        }
+    }).bind(&quot;addressBookWidgetDiv&quot;);
+
+    function get_details(billingAgreementId) {
+        $.post(&quot;/get_details&quot;, {
+            billingAgreementId: billingAgreementId
+        }).done(function (data) {
+            $(&quot;#get_details_response&quot;).html(data);
+        });
+    }
+&lt;/script&gt;
+</code></pre>
+
+<p>These are the back-end API calls to <em>SetBillingAgreementDetails</em> and <em>GetBillingAgreementDetails</em>.
+These API calls set the store name and return the billing agreement details.</p>
+<p>Refer to the <em>/get_details</em> endpoint in the 'recurring_payment.py'
+file for more details.</p>
+<pre><code class="language-python">from amazon_pay.client import AmazonPayClient
+
+client = AmazonPayClient(
+    mws_access_key=session['mws_access_key'],
+    mws_secret_key=session['mws_secret_key'],
+    merchant_id=session['merchant_id'],
+    sandbox=True,
+    region='na',
+    currency_code='USD')
+
+billing_agreement_id = request.form['billingAgreementId']
+session['billing_agreement_id'] = billing_agreement_id
+
+response = client.set_billing_agreement_details(
+    amazon_billing_agreement_id=billing_agreement_id,
+    store_name='Amazon Pay Python SDK')
+
+if response.success:
+    response = client.get_billing_agreement_details(
+        amazon_billing_agreement_id=billing_agreement_id,
+        address_consent_token=session['access_token'])
+
+pretty = json.dumps(
+    json.loads(
+        response.to_json()),
+    indent=4)
+return pretty
+</code></pre>
+
+<p>This is the live response from the previous API call.</p>
+<pre id="get_details_response"><div class="text-center"><img src="images/ajax-loader.gif" /></div></pre>
+{% endblock %}

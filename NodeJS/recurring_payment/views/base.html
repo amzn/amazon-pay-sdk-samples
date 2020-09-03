@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {% block head %}
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
+        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.5/styles/default.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.css">
+
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+        <script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jQuery-Knob/1.2.13/jquery.knob.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/notify/0.4.2/notify.min.js"></script>
+
+        <style>
+            body {
+                padding-top: 40px;
+                padding-bottom: 50px;
+            }
+            .lpa-sdk {
+                padding: 40px 15px;
+                text-align: center;
+            }
+            .input-group {
+                margin-bottom:10px;
+            }
+            #go-home {
+                cursor:pointer;
+            }
+            pre code {
+                overflow:scroll;
+                word-wrap:normal;
+                white-space:pre;
+            }
+        </style>
+
+        <script type='text/javascript'>
+        $(document).ready(function() {
+            $('.start-over').on('click', function() {
+                amazon.Login.logout();
+                document.cookie = "amazon_Login_accessToken=; expires=Thu, 01 Jan 1970 00:00:00 GMT";
+                window.location = '/';
+            });
+        });
+        </script>
+    {% endblock  %}
+    </head>
+    <body>
+        <div class="container">
+
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand start-over" href="#">Amazon Pay Python SDK Simple Recurring Payment</a>
+                    </div>
+                    <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a class="start-over" href="#">Start Over</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div class="jumbotron" style="padding-top:25px;" id="api-content">
+                <div id="section-content">
+                {% block content %}
+                    <h2>Getting Started</h2>
+                    <p style="padding-top:20px;">To get started, please fill in the required fields below. This information can be found in Seller Central.</p>
+
+                    <form class="form-horizontal" role="form" method="post" action="/cart">
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="merchant-id">Merchant Id</label>
+                            <div class="col-sm-8">
+                                <input type="test" class="form-control" name="merchant-id" placeholder="" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="mws-access-key">MWS Access Key</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="mws-access-key" placeholder="" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="mws-secret-key">MWS Secret Key</label>
+                            <div class="col-sm-8">
+                                <input type="password" class="form-control" name="mws-secret-key" placeholder="" value="">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-sm-3" for="client-id">Client Id</label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" name="client-id" placeholder="amzn1.application-oa2-client.xxxxxxxxxxxxxxxxxxx" value="">
+                            </div>
+                        </div>
+                        <div class="text-center" style="margin-top:40px">
+                            <button type="submit" id="submit-required" class="btn btn-lg btn-success">Continue</button>
+                        </div>
+                    </form>
+                {% endblock %}
+                </div>
+            </div>
+            <div class="jumbotron" style="padding-top:25px;" id="api-calls">
+            <h3>Code</h3>
+            {% block api %}
+            <p>This section will show relevant code.</p>
+            {% endblock  %}
+            </div>
+
+        </div>
+    </body>
+</html>
